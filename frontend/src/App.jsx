@@ -9,6 +9,9 @@ import RecruiterDashboardPage from './pages/recruiter/RecruiterDashboardPage.jsx
 import PostJobPage from './pages/recruiter/PostJobPage.jsx'
 import TalentSearchPage from './pages/recruiter/TalentSearchPage.jsx'
 import PlaceholderSection from './pages/recruiter/PlaceholderSection.jsx'
+import StudentLayout from './components/student/StudentLayout.jsx'
+import StudentDashboardPage from './pages/student/StudentDashboardPage.jsx'
+import StudentProfilePage from './pages/student/StudentProfilePage.jsx'
 
 function App() {
   return (
@@ -18,6 +21,11 @@ function App() {
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/features" element={<FeaturesPage />} />
+
+      <Route path="/student" element={<StudentLayout />}>
+        <Route index element={<StudentDashboardPage />} />
+        <Route path="profile" element={<StudentProfilePage />} />
+      </Route>
 
       {/* Recruiter Workspace Routes */}
       <Route path="/recruiter" element={<RecruiterLayout />}>

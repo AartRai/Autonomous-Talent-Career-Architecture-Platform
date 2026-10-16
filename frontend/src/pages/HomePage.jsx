@@ -131,7 +131,7 @@ function HomePage() {
 
       <section id="features" aria-label="Platform benefits" className="grid gap-5 border-b border-slate-100 px-6 py-7 sm:grid-cols-3 sm:gap-4 sm:px-10 md:px-14 lg:px-20">
         {landingAudiences.map(({ id, title, description, tone, icon }) => (
-          <Link key={id} id={id} to="/login" className="group flex items-center gap-4 rounded-2xl px-3 py-2 transition hover:bg-slate-50 sm:gap-4">
+          <Link key={id} id={id} to={id === 'students' ? '/student' : '/login'} className="group flex items-center gap-4 rounded-2xl px-3 py-2 transition hover:bg-slate-50 sm:gap-4">
             <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full ${tone === 'blue' ? 'bg-[#edf6ff] text-[#4a91de]' : tone === 'green' ? 'bg-[#e9faf3] text-[#33b88b]' : 'bg-[#fff0f1] text-[#dc737d]'}`}>
               <LandingAudienceIcon type={icon} />
             </span>
