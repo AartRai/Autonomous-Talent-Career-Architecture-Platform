@@ -175,5 +175,112 @@ export const skillDistributionData = [
   },
 ]
 
-
-
+/**
+ * Fictional demonstration candidates for the Recruiter Talent Search feature.
+ * These records and sample match indicators are mock values for local UI evaluation
+ * and do not originate from live AI inference, vector databases, or real candidate profiles.
+ */
+export const demoTalentSearchCandidates = [
+  {
+    id: 'talent-1',
+    name: 'Aarav Patel',
+    initials: 'AP',
+    role: 'Full-Stack Software Engineer',
+    education: 'B.Tech / B.E. in Computer Science (IIT Bombay)',
+    educationDegree: 'B.Tech / B.E.',
+    experienceLevel: '1–3 years',
+    experienceYears: '2 years',
+    location: 'Bengaluru',
+    workMode: 'Hybrid',
+    skills: ['React', 'Node.js', 'TypeScript', 'PostgreSQL', 'Tailwind CSS', 'AWS'],
+    demoMatchScore: 96,
+    summary:
+      'Full-stack engineer with 2 years of product engineering experience specializing in responsive React user interfaces, performant Node.js microservices, and PostgreSQL database optimization.',
+    tone: 'blue',
+  },
+  {
+    id: 'talent-2',
+    name: 'Maya Lin',
+    initials: 'ML',
+    role: 'AI / Machine Learning Engineer',
+    education: 'M.Tech / M.S. in Data Science & AI',
+    educationDegree: 'M.Tech / M.S.',
+    experienceLevel: '0–1 years',
+    experienceYears: '1 year',
+    location: 'Hyderabad',
+    workMode: 'Remote',
+    skills: ['Python', 'Machine Learning', 'PyTorch', 'TensorFlow', 'SQL', 'Docker'],
+    demoMatchScore: 92,
+    summary:
+      'Research-oriented ML engineer with hands-on expertise building transformer pipelines, fine-tuning open-source LLMs, and deploying model serving containers.',
+    tone: 'purple',
+  },
+  {
+    id: 'talent-3',
+    name: 'Devon Vance',
+    initials: 'DV',
+    role: 'Cloud & DevOps Architect',
+    education: 'B.Tech / B.E. in Information Technology',
+    educationDegree: 'B.Tech / B.E.',
+    experienceLevel: '3–5 years',
+    experienceYears: '3.5 years',
+    location: 'Pune',
+    workMode: 'On-site',
+    skills: ['AWS', 'DevOps', 'Docker', 'Kubernetes', 'Python', 'CI/CD'],
+    demoMatchScore: 89,
+    summary:
+      'DevOps specialist with over 3 years managing AWS multi-account infrastructure, Kubernetes cluster operations, Infrastructure-as-Code, and automated CI/CD security scanning.',
+    tone: 'emerald',
+  },
+  {
+    id: 'talent-4',
+    name: 'Priya Deshmukh',
+    initials: 'PD',
+    role: 'Senior Frontend Engineer',
+    education: 'B.Tech / B.E. in Computer Engineering',
+    educationDegree: 'B.Tech / B.E.',
+    experienceLevel: '3–5 years',
+    experienceYears: '4 years',
+    location: 'Bengaluru',
+    workMode: 'Remote',
+    skills: ['React', 'TypeScript', 'Node.js', 'Tailwind CSS', 'GraphQL', 'Next.js'],
+    demoMatchScore: 94,
+    summary:
+      'Frontend architect passionate about responsive component libraries, accessible web standards, micro-frontends, and client-side performance optimization.',
+    tone: 'blue',
+  },
+  {
+    id: 'talent-5',
+    name: 'Karthik Nair',
+    initials: 'KN',
+    role: 'Data Analyst & BI Specialist',
+    education: 'B.Sc / M.Sc Computer Science',
+    educationDegree: 'B.Sc / M.Sc Computer Science',
+    experienceLevel: '1–3 years',
+    experienceYears: '2 years',
+    location: 'Delhi NCR',
+    workMode: 'Hybrid',
+    skills: ['Python', 'SQL', 'Data Analytics', 'Tableau', 'Pandas', 'Power BI'],
+    demoMatchScore: 87,
+    summary:
+      'Analytical problem solver with 2 years analyzing user retention metrics, orchestrating ETL workflows, and building automated executive reporting dashboards.',
+    tone: 'amber',
+  },
+  {
+    id: 'talent-6',
+    name: 'Rohan Gupta',
+    initials: 'RG',
+    role: 'Backend Java Developer',
+    education: 'BCA / MCA in Computer Applications',
+    educationDegree: 'BCA / MCA',
+    experienceLevel: 'Fresher (0 years)',
+    experienceYears: 'Fresher (0 years)',
+    location: 'Mumbai',
+    workMode: 'On-site',
+    skills: ['Java', 'SQL', 'Spring Boot', 'REST APIs', 'Git', 'Docker'],
+    demoMatchScore: 84,
+    summary:
+      'Recent MCA graduate with strong foundations in Java OOP design patterns, relational schema design, RESTful microservices, and Docker containerization.',
+    tone: 'rose',
+  },
+]
