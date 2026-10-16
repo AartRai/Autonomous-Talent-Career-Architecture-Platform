@@ -2,7 +2,11 @@ import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { BrandMark } from '../components.jsx'
 
+<<<<<<< HEAD
 const futureLinks = ['For Students', 'For Faculty', 'For Recruiters']
+=======
+const futureLinks = ['About', 'Features', 'For Students', 'For Faculty']
+>>>>>>> 69f4329 (added recruiter post job page)
 
 function FutureLink({ children, onClick, className = '' }) {
   return (
@@ -50,6 +54,12 @@ function Navbar() {
         {futureLinks.map((label) => (
           <FutureLink key={label} className="py-7 text-[13px]">{label}</FutureLink>
         ))}
+        <NavLink
+          to="/recruiter"
+          className={({ isActive }) => `relative whitespace-nowrap py-7 text-[13px] font-medium transition-colors hover:text-blue-600 ${isActive ? 'text-slate-800 after:absolute after:inset-x-1 after:bottom-0 after:h-0.5 after:rounded-full after:bg-blue-500' : 'text-slate-600'}`}
+        >
+          For Recruiters
+        </NavLink>
       </nav>
 
       <div className="hidden items-center gap-3 xl:flex">
@@ -97,6 +107,9 @@ function Navbar() {
               {label}
             </FutureLink>
           ))}
+          <NavLink to="/recruiter" onClick={closeMenu} className={({ isActive }) => `rounded-lg px-4 py-3 text-sm font-medium hover:bg-blue-50 hover:text-blue-700 ${isActive ? 'text-blue-700' : 'text-slate-700'}`}>
+            For Recruiters
+          </NavLink>
           <div className="mt-2 flex gap-2 border-t border-slate-100 pt-3">
             <NavLink to="/login" onClick={closeMenu} className="flex-1 rounded-full border border-slate-200 px-4 py-2.5 text-center text-sm font-semibold text-slate-700">
               Login
