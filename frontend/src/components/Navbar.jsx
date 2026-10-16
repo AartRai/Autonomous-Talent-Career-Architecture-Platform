@@ -2,14 +2,31 @@ import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { BrandMark } from '../components.jsx'
 
-const futureLinks = ['For Students', 'For Faculty']
+const futureLinks = [
+  { label: 'For Students', to: '/student' },
+  { label: 'For Faculty' },
+]
 
-function FutureLink({ children, onClick, className = '' }) {
+function FutureLink({ children, onClick, className = '', to }) {
+  const linkClassName = `whitespace-nowrap text-left font-medium text-slate-600 transition-colors hover:text-blue-600 ${className}`
+
+  if (to) {
+    return (
+      <NavLink
+        to={to}
+        onClick={onClick}
+        className={({ isActive }) => `${linkClassName} ${isActive ? 'text-blue-700' : ''}`}
+      >
+        {children}
+      </NavLink>
+    )
+  }
+
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`whitespace-nowrap text-left font-medium text-slate-600 transition-colors hover:text-blue-600 ${className}`}
+      className={linkClassName}
     >
       {children}
     </button>
@@ -47,8 +64,8 @@ function Navbar() {
         >
           Features
         </NavLink>
-        {futureLinks.map((label) => (
-          <FutureLink key={label} className="py-7 text-[13px]">{label}</FutureLink>
+        {futureLinks.map(({ label, to }) => (
+          <FutureLink key={label} to={to} className="py-7 text-[13px]">{label}</FutureLink>
         ))}
         <NavLink
           to="/recruiter"
@@ -98,8 +115,8 @@ function Navbar() {
           <NavLink to="/features" onClick={closeMenu} className={({ isActive }) => `rounded-lg px-4 py-3 text-sm font-medium hover:bg-blue-50 hover:text-blue-700 ${isActive ? 'text-blue-700' : 'text-slate-700'}`}>
             Features
           </NavLink>
-          {futureLinks.map((label) => (
-            <FutureLink key={label} onClick={closeMenu} className="rounded-lg px-4 py-3 text-sm hover:bg-blue-50 hover:text-blue-700">
+          {futureLinks.map(({ label, to }) => (
+            <FutureLink key={label} to={to} onClick={closeMenu} className="rounded-lg px-4 py-3 text-sm hover:bg-blue-50 hover:text-blue-700">
               {label}
             </FutureLink>
           ))}
