@@ -1,27 +1,22 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import HomePage from './pages/HomePage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
-<<<<<<< HEAD
 import SignUpPage from './pages/SignUpPage.jsx'
 import AboutPage from './pages/AboutPage.jsx'
 import FeaturesPage from './pages/FeaturesPage.jsx'
-=======
 import RecruiterLayout from './components/recruiter/RecruiterLayout.jsx'
 import RecruiterDashboardPage from './pages/recruiter/RecruiterDashboardPage.jsx'
 import PostJobPage from './pages/recruiter/PostJobPage.jsx'
 import PlaceholderSection from './pages/recruiter/PlaceholderSection.jsx'
->>>>>>> 69f4329 (added recruiter post job page)
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
-<<<<<<< HEAD
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/features" element={<FeaturesPage />} />
-=======
 
       {/* Recruiter Workspace Routes */}
       <Route path="/recruiter" element={<RecruiterLayout />}>
@@ -34,7 +29,6 @@ function App() {
         <Route path="company" element={<PlaceholderSection title="Profile / Company Details" />} />
       </Route>
 
->>>>>>> 69f4329 (added recruiter post job page)
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
