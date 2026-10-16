@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
 import { BenefitIcon, FieldIcon, GoogleMark, LearningIllustration } from '../components.jsx'
 import { benefits } from '../benefits.js'
@@ -95,7 +96,7 @@ function LoginPage() {
               </button>
 
               <p className="mt-7 text-center text-[13px] text-[#66738d]">
-                New to Synapse? <button type="button" onClick={() => setNotice('Account creation will be available after an authentication service is connected.')} className="ml-1 font-semibold text-[#1764ed] hover:text-blue-800">Create an account</button>
+                New to Synapse? <Link to="/signup" className="ml-1 font-semibold text-[#1764ed] hover:text-blue-800">Create an account</Link>
               </p>
             </section>
           </div>

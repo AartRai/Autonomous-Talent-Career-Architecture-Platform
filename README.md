@@ -14,8 +14,11 @@ npm run dev
 
 - `/` — Home / landing page
 - `/login` — Login page
+- `/signup` — Sign-up page
+- `/about` — About Synapse
+- `/features` — Platform features
 
-About, Features, audience, and Sign Up navigation items are placeholders for future pages.
+Audience navigation items remain placeholders for future pages.
 
 ## Frontend structure
 

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { BrandMark } from '../components.jsx'
 
-const futureLinks = ['About', 'Features', 'For Students', 'For Faculty', 'For Recruiters']
+const futureLinks = ['For Students', 'For Faculty', 'For Recruiters']
 
 function FutureLink({ children, onClick, className = '' }) {
   return (
@@ -35,6 +35,18 @@ function Navbar() {
         >
           Home
         </NavLink>
+        <NavLink
+          to="/about"
+          className={({ isActive }) => `relative whitespace-nowrap py-7 text-[13px] font-medium transition-colors hover:text-blue-600 ${isActive ? 'text-blue-700 after:absolute after:inset-x-1 after:bottom-0 after:h-0.5 after:rounded-full after:bg-blue-500' : 'text-slate-600'}`}
+        >
+          About
+        </NavLink>
+        <NavLink
+          to="/features"
+          className={({ isActive }) => `relative whitespace-nowrap py-7 text-[13px] font-medium transition-colors hover:text-blue-600 ${isActive ? 'text-blue-700 after:absolute after:inset-x-1 after:bottom-0 after:h-0.5 after:rounded-full after:bg-blue-500' : 'text-slate-600'}`}
+        >
+          Features
+        </NavLink>
         {futureLinks.map((label) => (
           <FutureLink key={label} className="py-7 text-[13px]">{label}</FutureLink>
         ))}
@@ -47,9 +59,12 @@ function Navbar() {
         >
           Login
         </NavLink>
-        <FutureLink className="rounded-full bg-[#2875e8] px-6 py-2.5 text-[13px] font-semibold text-white shadow-[0_4px_12px_rgba(40,117,232,0.25)] hover:bg-blue-700 hover:text-white">
+        <NavLink
+          to="/signup"
+          className={({ isActive }) => `rounded-full bg-[#2875e8] px-6 py-2.5 text-[13px] font-semibold text-white shadow-[0_4px_12px_rgba(40,117,232,0.25)] transition hover:bg-blue-700 ${isActive ? 'ring-2 ring-blue-200 ring-offset-2' : ''}`}
+        >
           Sign Up
-        </FutureLink>
+        </NavLink>
       </div>
 
       <button
@@ -71,6 +86,12 @@ function Navbar() {
           <NavLink to="/" end onClick={closeMenu} className={({ isActive }) => `rounded-lg px-4 py-3 text-sm font-medium hover:bg-blue-50 hover:text-blue-700 ${isActive ? 'text-blue-700' : 'text-slate-700'}`}>
             Home
           </NavLink>
+          <NavLink to="/about" onClick={closeMenu} className={({ isActive }) => `rounded-lg px-4 py-3 text-sm font-medium hover:bg-blue-50 hover:text-blue-700 ${isActive ? 'text-blue-700' : 'text-slate-700'}`}>
+            About
+          </NavLink>
+          <NavLink to="/features" onClick={closeMenu} className={({ isActive }) => `rounded-lg px-4 py-3 text-sm font-medium hover:bg-blue-50 hover:text-blue-700 ${isActive ? 'text-blue-700' : 'text-slate-700'}`}>
+            Features
+          </NavLink>
           {futureLinks.map((label) => (
             <FutureLink key={label} onClick={closeMenu} className="rounded-lg px-4 py-3 text-sm hover:bg-blue-50 hover:text-blue-700">
               {label}
@@ -80,9 +101,9 @@ function Navbar() {
             <NavLink to="/login" onClick={closeMenu} className="flex-1 rounded-full border border-slate-200 px-4 py-2.5 text-center text-sm font-semibold text-slate-700">
               Login
             </NavLink>
-            <FutureLink onClick={closeMenu} className="flex-1 rounded-full bg-blue-600 px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-blue-700 hover:text-white">
+            <NavLink to="/signup" onClick={closeMenu} className="flex-1 rounded-full bg-blue-600 px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-blue-700">
               Sign Up
-            </FutureLink>
+            </NavLink>
           </div>
         </nav>
       )}

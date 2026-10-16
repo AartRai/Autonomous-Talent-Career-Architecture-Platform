@@ -17,6 +17,14 @@ export function BrandMark() {
 }
 
 export function FieldIcon({ type }) {
+  if (type === 'user') {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-5 w-5">
+        <circle cx="12" cy="8" r="3.5" stroke="currentColor" strokeWidth="1.8" />
+        <path d="M5 20c0-3.2 2.8-5.5 7-5.5s7 2.3 7 5.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    )
+  }
   if (type === 'email') {
     return (
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-5 w-5">
