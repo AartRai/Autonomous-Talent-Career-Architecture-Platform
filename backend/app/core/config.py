@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
     refresh_token_expire_days_remember: int = 30
+    resume_storage_dir: str = "storage/resumes"
+    max_resume_upload_mb: int = 5
 
 
 @lru_cache

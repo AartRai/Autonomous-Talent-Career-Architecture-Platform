@@ -1,14 +1,19 @@
 import asyncio
-from collections.abc import AsyncIterator
+import os
+import tempfile
+from collections.abc import AsyncIterator, Callable
 
 import asyncpg
 import pytest
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from app.db.base import Base
-from app.db.session import get_db
-from app.main import create_app
+os.environ["RESUME_STORAGE_DIR"] = tempfile.mkdtemp(prefix="synapse-test-storage-")
+
+from app.db.base import Base  # noqa: E402
+from app.db.session import get_db  # noqa: E402
+from app.main import create_app  # noqa: E402
+from app.models.skill import Skill, SkillSource  # noqa: E402
 
 TEST_DATABASE_URL = "postgresql+asyncpg://synapse:synapse@localhost:5432/synapse_test"
 
@@ -63,3 +68,46 @@ async def client(app) -> AsyncIterator[AsyncClient]:
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         yield client
+
+
+@pytest.fixture
+def make_user(client: AsyncClient) -> Callable:
+    async def _make(email: str, role: str = "student") -> dict:
+        response = await client.post(
+            "/api/v1/auth/signup",
+            json={
+                "email": email,
+                "password": "password123",
+                "full_name": "Test User",
+                "role": role,
+            },
+        )
+        assert response.status_code == 201
+        return response.json()
+
+    return _make
+
+
+@pytest.fixture
+async def seed_skills(db_session: AsyncSession) -> list[str]:
+    names = [
+        "python",
+        "machine learning",
+        "fastapi",
+        "docker",
+        "react",
+        "typescript",
+        "aws",
+        "kubernetes",
+        "sql",
+        "excel",
+    ]
+    for name in names:
+        db_session.add(
+            Skill(name=name, display_name=name.title(), source=SkillSource.seed)
+        )
+    db_session.add(
+        Skill(name="customstack", display_name="CustomStack", source=SkillSource.user)
+    )
+    await db_session.commit()
+    return names
