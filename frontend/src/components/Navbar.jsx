@@ -2,11 +2,7 @@ import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { BrandMark } from '../components.jsx'
 
-<<<<<<< HEAD
-const futureLinks = ['For Students', 'For Faculty', 'For Recruiters']
-=======
-const futureLinks = ['About', 'Features', 'For Students', 'For Faculty']
->>>>>>> 69f4329 (added recruiter post job page)
+const futureLinks = ['For Students', 'For Faculty']
 
 function FutureLink({ children, onClick, className = '' }) {
   return (
