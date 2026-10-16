@@ -7,6 +7,7 @@ import FeaturesPage from './pages/FeaturesPage.jsx'
 import RecruiterLayout from './components/recruiter/RecruiterLayout.jsx'
 import RecruiterDashboardPage from './pages/recruiter/RecruiterDashboardPage.jsx'
 import PostJobPage from './pages/recruiter/PostJobPage.jsx'
+import TalentSearchPage from './pages/recruiter/TalentSearchPage.jsx'
 import PlaceholderSection from './pages/recruiter/PlaceholderSection.jsx'
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
       <Route path="/recruiter" element={<RecruiterLayout />}>
         <Route index element={<RecruiterDashboardPage />} />
         <Route path="post-job" element={<PostJobPage />} />
-        <Route path="talent-search" element={<PlaceholderSection title="Talent Search" />} />
+        <Route path="talent-search" element={<TalentSearchPage />} />
         <Route path="candidates" element={<PlaceholderSection title="Candidate Profiles" />} />
         <Route path="applications" element={<PlaceholderSection title="Applications Management" />} />
         <Route path="analytics" element={<PlaceholderSection title="Analytics & Reports" />} />
