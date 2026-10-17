@@ -8,6 +8,8 @@ import RecruiterLayout from './components/recruiter/RecruiterLayout.jsx'
 import RecruiterDashboardPage from './pages/recruiter/RecruiterDashboardPage.jsx'
 import PostJobPage from './pages/recruiter/PostJobPage.jsx'
 import TalentSearchPage from './pages/recruiter/TalentSearchPage.jsx'
+import CandidateProfilesPage from './pages/recruiter/CandidateProfilesPage.jsx'
+import ApplicationsPage from './pages/recruiter/ApplicationsPage.jsx'
 import PlaceholderSection from './pages/recruiter/PlaceholderSection.jsx'
 import StudentLayout from './components/student/StudentLayout.jsx'
 import StudentDashboardPage from './pages/student/StudentDashboardPage.jsx'
@@ -32,8 +34,8 @@ function App() {
         <Route index element={<RecruiterDashboardPage />} />
         <Route path="post-job" element={<PostJobPage />} />
         <Route path="talent-search" element={<TalentSearchPage />} />
-        <Route path="candidates" element={<PlaceholderSection title="Candidate Profiles" />} />
-        <Route path="applications" element={<PlaceholderSection title="Applications Management" />} />
+        <Route path="candidates" element={<CandidateProfilesPage />} />
+        <Route path="applications" element={<ApplicationsPage />} />
         <Route path="analytics" element={<PlaceholderSection title="Analytics & Reports" />} />
         <Route path="company" element={<PlaceholderSection title="Profile / Company Details" />} />
       </Route>
