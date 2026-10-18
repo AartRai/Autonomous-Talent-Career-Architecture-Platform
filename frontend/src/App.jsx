@@ -10,7 +10,8 @@ import PostJobPage from './pages/recruiter/PostJobPage.jsx'
 import TalentSearchPage from './pages/recruiter/TalentSearchPage.jsx'
 import CandidateProfilesPage from './pages/recruiter/CandidateProfilesPage.jsx'
 import ApplicationsPage from './pages/recruiter/ApplicationsPage.jsx'
-import PlaceholderSection from './pages/recruiter/PlaceholderSection.jsx'
+import AnalyticsPage from './pages/recruiter/AnalyticsPage.jsx'
+import RecruiterProfilePage from './pages/recruiter/RecruiterProfilePage.jsx'
 import StudentLayout from './components/student/StudentLayout.jsx'
 import StudentDashboardPage from './pages/student/StudentDashboardPage.jsx'
 import StudentProfilePage from './pages/student/StudentProfilePage.jsx'
@@ -36,8 +37,8 @@ function App() {
         <Route path="talent-search" element={<TalentSearchPage />} />
         <Route path="candidates" element={<CandidateProfilesPage />} />
         <Route path="applications" element={<ApplicationsPage />} />
-        <Route path="analytics" element={<PlaceholderSection title="Analytics & Reports" />} />
-        <Route path="company" element={<PlaceholderSection title="Profile / Company Details" />} />
+        <Route path="analytics" element={<AnalyticsPage />} />
+        <Route path="company" element={<RecruiterProfilePage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
