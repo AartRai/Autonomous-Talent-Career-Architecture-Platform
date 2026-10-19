@@ -15,6 +15,13 @@ import RecruiterProfilePage from './pages/recruiter/RecruiterProfilePage.jsx'
 import StudentLayout from './components/student/StudentLayout.jsx'
 import StudentDashboardPage from './pages/student/StudentDashboardPage.jsx'
 import StudentProfilePage from './pages/student/StudentProfilePage.jsx'
+import FacultyLayout from './components/faculty/FacultyLayout.jsx'
+import FacultyDashboardPage from './pages/faculty/FacultyDashboardPage.jsx'
+import ResearchOpportunitiesPage from './pages/faculty/ResearchOpportunitiesPage.jsx'
+import IndustrialTrainingFDPPage from './pages/faculty/IndustrialTrainingFDPPage.jsx'
+import CollaborationRequestsPage from './pages/faculty/CollaborationRequestsPage.jsx'
+import FacultyProfilePage from './pages/faculty/FacultyProfilePage.jsx'
+import FacultyNotificationsPage from './pages/faculty/FacultyNotificationsPage.jsx'
 
 function App() {
   return (
@@ -39,6 +46,16 @@ function App() {
         <Route path="applications" element={<ApplicationsPage />} />
         <Route path="analytics" element={<AnalyticsPage />} />
         <Route path="company" element={<RecruiterProfilePage />} />
+      </Route>
+
+      {/* Faculty Workspace Routes */}
+      <Route path="/faculty" element={<FacultyLayout />}>
+        <Route index element={<FacultyDashboardPage />} />
+        <Route path="opportunities" element={<ResearchOpportunitiesPage />} />
+        <Route path="training" element={<IndustrialTrainingFDPPage />} />
+        <Route path="collaborations" element={<CollaborationRequestsPage />} />
+        <Route path="profile" element={<FacultyProfilePage />} />
+        <Route path="notifications" element={<FacultyNotificationsPage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
