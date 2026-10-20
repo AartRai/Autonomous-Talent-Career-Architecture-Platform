@@ -10,11 +10,20 @@ import PostJobPage from './pages/recruiter/PostJobPage.jsx'
 import TalentSearchPage from './pages/recruiter/TalentSearchPage.jsx'
 import CandidateProfilesPage from './pages/recruiter/CandidateProfilesPage.jsx'
 import ApplicationsPage from './pages/recruiter/ApplicationsPage.jsx'
-import PlaceholderSection from './pages/recruiter/PlaceholderSection.jsx'
+import AnalyticsPage from './pages/recruiter/AnalyticsPage.jsx'
+import RecruiterProfilePage from './pages/recruiter/RecruiterProfilePage.jsx'
+import FacultyLayout from './components/faculty/FacultyLayout.jsx'
+import FacultyDashboardPage from './pages/faculty/FacultyDashboardPage.jsx'
+import ResearchOpportunitiesPage from './pages/faculty/ResearchOpportunitiesPage.jsx'
+import IndustrialTrainingFDPPage from './pages/faculty/IndustrialTrainingFDPPage.jsx'
+import CollaborationRequestsPage from './pages/faculty/CollaborationRequestsPage.jsx'
+import FacultyProfilePage from './pages/faculty/FacultyProfilePage.jsx'
+import FacultyNotificationsPage from './pages/faculty/FacultyNotificationsPage.jsx'
 import StudentLayout from './components/student/StudentLayout.jsx'
 import StudentDashboardPage from './pages/student/StudentDashboardPage.jsx'
 import StudentProfilePage from './pages/student/StudentProfilePage.jsx'
 import StudentSkillAnalysisPage from './pages/student/StudentSkillAnalysisPage.jsx'
+
 
 function App() {
   return (
@@ -38,8 +47,18 @@ function App() {
         <Route path="talent-search" element={<TalentSearchPage />} />
         <Route path="candidates" element={<CandidateProfilesPage />} />
         <Route path="applications" element={<ApplicationsPage />} />
-        <Route path="analytics" element={<PlaceholderSection title="Analytics & Reports" />} />
-        <Route path="company" element={<PlaceholderSection title="Profile / Company Details" />} />
+        <Route path="analytics" element={<AnalyticsPage />} />
+        <Route path="company" element={<RecruiterProfilePage />} />
+      </Route>
+
+      {/* Faculty Workspace Routes */}
+      <Route path="/faculty" element={<FacultyLayout />}>
+        <Route index element={<FacultyDashboardPage />} />
+        <Route path="opportunities" element={<ResearchOpportunitiesPage />} />
+        <Route path="training" element={<IndustrialTrainingFDPPage />} />
+        <Route path="collaborations" element={<CollaborationRequestsPage />} />
+        <Route path="profile" element={<FacultyProfilePage />} />
+        <Route path="notifications" element={<FacultyNotificationsPage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
