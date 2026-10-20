@@ -169,3 +169,60 @@ export const studentProfileData = {
     ],
   },
 }
+
+export const studentSkillAnalysisData = {
+  updatedAt: '10 Oct 2024',
+  summary: {
+    overallScore: 72,
+    totalSkills: 28,
+    strongSkills: 14,
+    skillsToImprove: 6,
+    learningStreak: 21,
+  },
+  categories: [
+    { name: 'Programming', score: 80, color: '#2563eb' },
+    { name: 'Data Science', score: 65, color: '#10b981' },
+    { name: 'Web Development', score: 75, color: '#8b5cf6' },
+    { name: 'Database', score: 60, color: '#f59e0b' },
+    { name: 'DevOps', score: 45, color: '#ef4444' },
+    { name: 'Soft Skills', score: 70, color: '#14b8a6' },
+  ],
+  strengths: [
+    { name: 'Python', score: 90, level: 'Advanced', icon: 'python', color: 'text-[#475569] bg-[#f1f5f9]' },
+    { name: 'JavaScript', score: 85, level: 'Advanced', icon: 'js', color: 'text-[#a16207] bg-[#fef3c7]' },
+    { name: 'SQL', score: 75, level: 'Good', icon: 'database', color: 'text-[#2563eb] bg-[#eff6ff]' },
+    { name: 'Machine Learning', score: 70, level: 'Good', icon: 'ai', color: 'text-[#db2777] bg-[#fdf2f8]' },
+    { name: 'Communication', score: 68, level: 'Good', icon: 'chat', color: 'text-[#2563eb] bg-[#eff6ff]' },
+    { name: 'Git', score: 66, level: 'Good', icon: 'code', color: 'text-[#ea580c] bg-[#fff7ed]' },
+    { name: 'Problem Solving', score: 64, level: 'Good', icon: 'idea', color: 'text-[#7c3aed] bg-[#f5f3ff]' },
+    { name: 'Teamwork', score: 62, level: 'Good', icon: 'team', color: 'text-[#0891b2] bg-[#ecfeff]' },
+  ],
+  improvementAreas: [
+    { name: 'Data Structures', score: 50, level: 'Medium', color: 'amber' },
+    { name: 'System Design', score: 45, level: 'Medium', color: 'amber' },
+    { name: 'Cloud Computing', score: 35, level: 'Low', color: 'red' },
+    { name: 'DevOps', score: 30, level: 'Low', color: 'red' },
+    { name: 'Algorithms', score: 25, level: 'Low', color: 'red' },
+  ],
+  learningRecommendations: [
+    { title: 'Data Structures & Algorithms', detail: 'Practice core data structures and problem-solving patterns.' },
+    { title: 'Cloud Computing Fundamentals', detail: 'Learn cloud concepts, deployment, and basic AWS services.' },
+    { title: 'Introduction to DevOps', detail: 'Build practical skills with CI/CD and container workflows.' },
+  ],
+  progress: [
+    { month: 'May', overall: 40, programming: 58, dataScience: 24 },
+    { month: 'Jun', overall: 46, programming: 64, dataScience: 29 },
+    { month: 'Jul', overall: 52, programming: 70, dataScience: 34 },
+    { month: 'Aug', overall: 58, programming: 72, dataScience: 40 },
+    { month: 'Sep', overall: 64, programming: 75, dataScience: 46 },
+    { month: 'Oct', overall: 72, programming: 80, dataScience: 56 },
+  ],
+  recentActivity: [
+    { title: 'Completed Python Advanced Course', category: 'Programming', date: '10 Oct 2024', time: '10:30 AM', icon: 'course', color: 'green' },
+    { title: 'Solved 15 Data Structures Problems', category: 'Data Structures', date: '09 Oct 2024', time: '08:15 PM', icon: 'code', color: 'blue' },
+    { title: 'Watched Machine Learning Tutorial', category: 'Machine Learning', date: '08 Oct 2024', time: '07:45 PM', icon: 'learn', color: 'purple' },
+    { title: 'SQL Practice Quiz Completed', category: 'SQL', date: '08 Oct 2024', time: '05:20 PM', icon: 'award', color: 'orange' },
+    { title: 'Practiced Git Branching', category: 'Tools', date: '07 Oct 2024', time: '06:10 PM', icon: 'code', color: 'blue' },
+    { title: 'Completed a Problem-Solving Challenge', category: 'Algorithms', date: '06 Oct 2024', time: '04:40 PM', icon: 'award', color: 'orange' },
+  ],
+}

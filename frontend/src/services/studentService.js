@@ -1,4 +1,8 @@
-import { studentDashboardData, studentProfileData } from '../data/studentMockData.js'
+import {
+  studentDashboardData,
+  studentProfileData,
+  studentSkillAnalysisData,
+} from '../data/studentMockData.js'
 
 /**
  * Student Service
@@ -12,4 +16,8 @@ export async function getStudentDashboardData() {
 
 export async function getStudentProfileData() {
   return Promise.resolve(studentProfileData)
+}
+
+export async function getStudentSkillAnalysisData() {
+  return Promise.resolve(studentSkillAnalysisData)
 }

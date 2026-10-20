@@ -14,7 +14,7 @@ import {
 const studentNavItems = [
   { name: 'Dashboard', icon: StudentDashboardIcon, to: '/student' },
   { name: 'Profile', icon: StudentProfileIcon, to: '/student/profile' },
-  { name: 'Skill Analysis', icon: StudentSkillIcon },
+  { name: 'Skill Analysis', icon: StudentSkillIcon, to: '/student/skill-analysis' },
   { name: 'Recommended Jobs', icon: StudentJobsIcon },
   { name: 'Recommended Courses', icon: StudentCoursesIcon },
   { name: 'Applications', icon: StudentApplicationsIcon },

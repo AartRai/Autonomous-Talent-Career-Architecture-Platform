@@ -14,6 +14,7 @@ import PlaceholderSection from './pages/recruiter/PlaceholderSection.jsx'
 import StudentLayout from './components/student/StudentLayout.jsx'
 import StudentDashboardPage from './pages/student/StudentDashboardPage.jsx'
 import StudentProfilePage from './pages/student/StudentProfilePage.jsx'
+import StudentSkillAnalysisPage from './pages/student/StudentSkillAnalysisPage.jsx'
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
       <Route path="/student" element={<StudentLayout />}>
         <Route index element={<StudentDashboardPage />} />
         <Route path="profile" element={<StudentProfilePage />} />
+        <Route path="skill-analysis" element={<StudentSkillAnalysisPage />} />
       </Route>
 
       {/* Recruiter Workspace Routes */}

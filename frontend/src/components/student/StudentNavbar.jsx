@@ -7,7 +7,11 @@ import {
 
 function StudentNavbar({ onMenuClick }) {
   const { pathname } = useLocation()
-  const pageTitle = pathname === '/student/profile' ? 'Profile' : 'Student Dashboard'
+  const pageTitle = pathname === '/student/profile'
+    ? 'Profile'
+    : pathname === '/student/skill-analysis'
+      ? 'Skill Analysis'
+      : 'Student Dashboard'
 
   return (
     <header className="sticky top-0 z-30 flex h-[72px] w-full items-center justify-between border-b border-[#e2ecf9] bg-white px-4 sm:px-6 lg:px-8">
