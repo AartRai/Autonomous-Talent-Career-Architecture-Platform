@@ -4,7 +4,7 @@ import { BrandMark } from '../components.jsx'
 
 const futureLinks = [
   { label: 'For Students', to: '/student' },
-  { label: 'For Faculty' },
+  { label: 'For Faculty', to: '/faculty' },
 ]
 
 function FutureLink({ children, onClick, className = '', to }) {
