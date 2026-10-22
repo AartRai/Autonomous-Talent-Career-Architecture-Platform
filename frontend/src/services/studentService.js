@@ -1,5 +1,6 @@
 import {
   studentDashboardData,
+  studentJobRecommendations,
   studentProfileData,
   studentSkillAnalysisData,
 } from '../data/studentMockData.js'
@@ -12,6 +13,10 @@ import {
  */
 export async function getStudentDashboardData() {
   return Promise.resolve(studentDashboardData)
+}
+
+export async function getStudentJobRecommendations() {
+  return Promise.resolve(studentJobRecommendations)
 }
 
 export async function getStudentProfileData() {

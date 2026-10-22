@@ -23,6 +23,7 @@ import StudentLayout from './components/student/StudentLayout.jsx'
 import StudentDashboardPage from './pages/student/StudentDashboardPage.jsx'
 import StudentProfilePage from './pages/student/StudentProfilePage.jsx'
 import StudentSkillAnalysisPage from './pages/student/StudentSkillAnalysisPage.jsx'
+import StudentRecommendedJobsPage from './pages/student/StudentRecommendedJobsPage.jsx'
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
         <Route index element={<StudentDashboardPage />} />
         <Route path="profile" element={<StudentProfilePage />} />
         <Route path="skill-analysis" element={<StudentSkillAnalysisPage />} />
+        <Route path="recommended-jobs" element={<StudentRecommendedJobsPage />} />
       </Route>
 
       {/* Recruiter Workspace Routes */}
