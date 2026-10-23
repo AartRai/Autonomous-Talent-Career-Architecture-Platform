@@ -28,6 +28,7 @@ Vite prints the local development URL in the terminal.
 - `/student/profile` — Student profile
 - `/student/skill-analysis` — Skill analysis dashboard with skill scores, strengths, areas to improve, progress, and recent activity
 - `/student/recommended-jobs` — Filterable job recommendations with match scores, saved jobs, and demo application actions
+- `/student/recommended-courses` — Filterable course recommendations with learning progress, skill suggestions, and demo enrollment actions
 
 ### Recruiter workspace
 

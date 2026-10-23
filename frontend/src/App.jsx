@@ -24,6 +24,7 @@ import StudentDashboardPage from './pages/student/StudentDashboardPage.jsx'
 import StudentProfilePage from './pages/student/StudentProfilePage.jsx'
 import StudentSkillAnalysisPage from './pages/student/StudentSkillAnalysisPage.jsx'
 import StudentRecommendedJobsPage from './pages/student/StudentRecommendedJobsPage.jsx'
+import StudentRecommendedCoursesPage from './pages/student/StudentRecommendedCoursesPage.jsx'
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
         <Route path="profile" element={<StudentProfilePage />} />
         <Route path="skill-analysis" element={<StudentSkillAnalysisPage />} />
         <Route path="recommended-jobs" element={<StudentRecommendedJobsPage />} />
+        <Route path="recommended-courses" element={<StudentRecommendedCoursesPage />} />
       </Route>
 
       {/* Recruiter Workspace Routes */}

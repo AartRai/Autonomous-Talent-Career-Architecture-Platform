@@ -11,6 +11,7 @@ function StudentNavbar({ onMenuClick }) {
     '/student/profile': 'Profile',
     '/student/skill-analysis': 'Skill Analysis',
     '/student/recommended-jobs': 'Recommended Jobs',
+    '/student/recommended-courses': 'Recommended Courses',
   }
   const pageTitle = pageTitles[pathname] ?? 'Student Dashboard'
 

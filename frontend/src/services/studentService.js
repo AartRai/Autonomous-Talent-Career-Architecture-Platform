@@ -1,5 +1,6 @@
 import {
   studentDashboardData,
+  studentCourseRecommendations,
   studentJobRecommendations,
   studentProfileData,
   studentSkillAnalysisData,
@@ -17,6 +18,10 @@ export async function getStudentDashboardData() {
 
 export async function getStudentJobRecommendations() {
   return Promise.resolve(studentJobRecommendations)
+}
+
+export async function getStudentCourseRecommendations() {
+  return Promise.resolve(studentCourseRecommendations)
 }
 
 export async function getStudentProfileData() {

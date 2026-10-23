@@ -16,7 +16,7 @@ const studentNavItems = [
   { name: 'Profile', icon: StudentProfileIcon, to: '/student/profile' },
   { name: 'Skill Analysis', icon: StudentSkillIcon, to: '/student/skill-analysis' },
   { name: 'Recommended Jobs', icon: StudentJobsIcon, to: '/student/recommended-jobs' },
-  { name: 'Recommended Courses', icon: StudentCoursesIcon },
+  { name: 'Recommended Courses', icon: StudentCoursesIcon, to: '/student/recommended-courses' },
   { name: 'Applications', icon: StudentApplicationsIcon },
   { name: 'Notifications', icon: StudentBellIcon },
 ]
