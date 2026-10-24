@@ -13,6 +13,7 @@ from app.models.job import ExperienceLevel, Job, JobStatus, JobType, WorkMode
 from app.models.profile import Profile
 from app.models.skill import SkillSource
 from app.models.user import RoleEnum, User
+from app.services import jobs as job_service
 from app.services import skills as skill_service
 
 DEMO_EMAIL = "demo.recruiter@synapse.dev"
@@ -64,67 +65,83 @@ JOBS = [
 ]
 
 
-async def seed(session: AsyncSession) -> bool:
+async def seed(session: AsyncSession) -> tuple[bool, int]:
+    """Return (created_new_recruiter, embeddings_backfilled)."""
     existing = await session.scalar(select(User).where(User.email == DEMO_EMAIL))
-    if existing is not None:
-        return False
+    if existing is None:
+        recruiter = User(
+            email=DEMO_EMAIL,
+            hashed_password=await security.hash_password(DEMO_PASSWORD),
+            full_name="Demo Recruiter",
+            role=RoleEnum.recruiter,
+        )
+        session.add(recruiter)
+        await session.commit()
+        await session.refresh(recruiter)
 
-    recruiter = User(
-        email=DEMO_EMAIL,
-        hashed_password=await security.hash_password(DEMO_PASSWORD),
-        full_name="Demo Recruiter",
-        role=RoleEnum.recruiter,
-    )
-    session.add(recruiter)
-    await session.commit()
-    await session.refresh(recruiter)
+        session.add(
+            Profile(
+                user_id=recruiter.id,
+                company_name="Synapse Demo Corp",
+                job_title="Talent Lead",
+            )
+        )
 
-    session.add(
-        Profile(
-            user_id=recruiter.id,
-            company_name="Synapse Demo Corp",
-            job_title="Talent Lead",
+        for data in JOBS:
+            required_skills = await skill_service.get_or_create_skills(
+                session, data["required_skills"], SkillSource.user
+            )
+            preferred_skills = await skill_service.get_or_create_skills(
+                session, data["preferred_skills"], SkillSource.user
+            )
+            job = Job(
+                recruiter_id=recruiter.id,
+                title=data["title"],
+                company_name="Synapse Demo Corp",
+                location=data["location"],
+                work_mode=data["work_mode"],
+                job_type=data["job_type"],
+                experience_level=data["experience_level"],
+                salary_range=data["salary_range"],
+                openings_count=data["openings_count"],
+                description=data["description"],
+                responsibilities=data["responsibilities"],
+                qualifications=data["qualifications"],
+                status=JobStatus.active,
+            )
+            job.required_skills = required_skills
+            job.preferred_skills = preferred_skills
+            await job_service.embed_job(job)
+            session.add(job)
+
+        await session.commit()
+        return True, 0
+
+    return False, await backfill_embeddings(session)
+
+
+async def backfill_embeddings(session: AsyncSession) -> int:
+    jobs = list(
+        await session.scalars(
+            select(Job).where(Job.company_name == "Synapse Demo Corp", Job.embedding.is_(None))
         )
     )
-
-    for data in JOBS:
-        required_skills = await skill_service.get_or_create_skills(
-            session, data["required_skills"], SkillSource.user
-        )
-        preferred_skills = await skill_service.get_or_create_skills(
-            session, data["preferred_skills"], SkillSource.user
-        )
-        job = Job(
-            recruiter_id=recruiter.id,
-            title=data["title"],
-            company_name="Synapse Demo Corp",
-            location=data["location"],
-            work_mode=data["work_mode"],
-            job_type=data["job_type"],
-            experience_level=data["experience_level"],
-            salary_range=data["salary_range"],
-            openings_count=data["openings_count"],
-            description=data["description"],
-            responsibilities=data["responsibilities"],
-            qualifications=data["qualifications"],
-            status=JobStatus.active,
-        )
-        job.required_skills = required_skills
-        job.preferred_skills = preferred_skills
-        session.add(job)
-
+    for job in jobs:
+        await job_service.embed_job(job)
     await session.commit()
-    return True
+    return sum(1 for job in jobs if job.embedding is not None)
 
 
 async def main() -> None:
     async with async_session_factory() as session:
-        created = await seed(session)
+        created, backfilled = await seed(session)
     if created:
         print(f"Demo recruiter created: {DEMO_EMAIL} / {DEMO_PASSWORD}")
         print(f"Seeded {len(JOBS)} demo jobs.")
     else:
         print("Demo recruiter already exists; nothing to do.")
+        if backfilled:
+            print(f"Backfilled embeddings for {backfilled} demo jobs.")
 
 
 if __name__ == "__main__":

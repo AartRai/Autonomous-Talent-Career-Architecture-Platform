@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import get_settings
+from app.ml.embedder import EmbedderUnavailable, get_embedder
 from app.ml.ner import SpacyModelUnavailable, get_nlp
 from app.routers import api_v1
 from app.routers.health import router as health_router
@@ -18,6 +19,11 @@ async def lifespan(app: FastAPI):
         get_nlp()
         logger.info("spaCy model loaded")
     except SpacyModelUnavailable as exc:
+        logger.warning("%s", exc)
+    try:
+        get_embedder()
+        logger.info("embedding model loaded")
+    except EmbedderUnavailable as exc:
         logger.warning("%s", exc)
     yield
 

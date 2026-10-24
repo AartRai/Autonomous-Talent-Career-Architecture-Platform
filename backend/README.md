@@ -20,6 +20,7 @@ alembic upgrade head
 - `GET http://localhost:8000/health` → `{"status": "ok"}`
 - Swagger UI: `http://localhost:8000/docs`
 - CORS allows the Vite dev origin `http://localhost:5173`
+- `GET /api/v1/matches` (student) ranks active jobs by embedding cosine similarity and returns gap analysis per job. The `all-MiniLM-L6-v2` model downloads automatically on first use (~90 MB, internet required); if it is unavailable the endpoint falls back to rule-based skill-overlap scoring (`method` field marks the path used).
 - Resume uploads are stored under `storage/resumes` (gitignored, configurable via `RESUME_STORAGE_DIR`); extracted text lives in the DB. Uploads are capped at `MAX_RESUME_UPLOAD_MB` (default 5 MB) and validated by file signature.
 - If the spaCy model is missing, resume parsing returns 503 with the install command in the error detail.
 

@@ -18,6 +18,7 @@ class Settings(BaseSettings):
     refresh_token_expire_days_remember: int = 30
     resume_storage_dir: str = "storage/resumes"
     max_resume_upload_mb: int = 5
+    skill_match_threshold: float = 0.55
 
 
 @lru_cache

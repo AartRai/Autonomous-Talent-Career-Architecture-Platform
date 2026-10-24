@@ -34,6 +34,14 @@ async def _ensure_test_database() -> None:
     finally:
         await conn.close()
 
+    conn = await asyncpg.connect(
+        database="synapse_test", user="synapse", password="synapse", host="localhost", port=5432
+    )
+    try:
+        await conn.execute("CREATE EXTENSION IF NOT EXISTS vector")
+    finally:
+        await conn.close()
+
 
 @pytest.fixture
 async def db_session() -> AsyncIterator[AsyncSession]:
