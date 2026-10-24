@@ -25,6 +25,8 @@ import StudentProfilePage from './pages/student/StudentProfilePage.jsx'
 import StudentSkillAnalysisPage from './pages/student/StudentSkillAnalysisPage.jsx'
 import StudentRecommendedJobsPage from './pages/student/StudentRecommendedJobsPage.jsx'
 import StudentRecommendedCoursesPage from './pages/student/StudentRecommendedCoursesPage.jsx'
+import StudentApplicationsPage from './pages/student/StudentApplicationsPage.jsx'
+import StudentNotificationsPage from './pages/student/StudentNotificationsPage.jsx'
 
 
 function App() {
@@ -42,6 +44,8 @@ function App() {
         <Route path="skill-analysis" element={<StudentSkillAnalysisPage />} />
         <Route path="recommended-jobs" element={<StudentRecommendedJobsPage />} />
         <Route path="recommended-courses" element={<StudentRecommendedCoursesPage />} />
+        <Route path="applications" element={<StudentApplicationsPage />} />
+        <Route path="notifications" element={<StudentNotificationsPage />} />
       </Route>
 
       {/* Recruiter Workspace Routes */}

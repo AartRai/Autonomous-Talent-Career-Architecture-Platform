@@ -1,8 +1,11 @@
 import {
   studentDashboardData,
   studentCourseRecommendations,
+  studentApplicationsData,
   studentJobRecommendations,
+  studentNotificationsData,
   studentProfileData,
+  studentSavedJobsData,
   studentSkillAnalysisData,
 } from '../data/studentMockData.js'
 
@@ -22,6 +25,18 @@ export async function getStudentJobRecommendations() {
 
 export async function getStudentCourseRecommendations() {
   return Promise.resolve(studentCourseRecommendations)
+}
+
+export async function getStudentApplicationsData() {
+  return Promise.resolve(studentApplicationsData)
+}
+
+export async function getStudentSavedJobsData() {
+  return Promise.resolve(studentSavedJobsData)
+}
+
+export async function getStudentNotificationsData() {
+  return Promise.resolve(studentNotificationsData)
 }
 
 export async function getStudentProfileData() {

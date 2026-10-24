@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import {
   StudentBellIcon,
   StudentMenuIcon,
@@ -12,6 +12,8 @@ function StudentNavbar({ onMenuClick }) {
     '/student/skill-analysis': 'Skill Analysis',
     '/student/recommended-jobs': 'Recommended Jobs',
     '/student/recommended-courses': 'Recommended Courses',
+    '/student/applications': 'Applications',
+    '/student/notifications': 'Notifications',
   }
   const pageTitle = pageTitles[pathname] ?? 'Student Dashboard'
 
@@ -51,15 +53,15 @@ function StudentNavbar({ onMenuClick }) {
       </div>
 
       <div className="flex items-center gap-3 sm:gap-4">
-        <button
-          type="button"
+        <Link
+          to="/student/notifications"
           className="relative inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[#e4ebf5] bg-white text-slate-600 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
           aria-label="View notifications"
-          title="Notifications coming soon"
+          title="View notifications"
         >
           <StudentBellIcon />
           <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-[#1260ed] ring-2 ring-white" />
-        </button>
+        </Link>
         <div className="h-8 w-px bg-[#e5edf8]" aria-hidden="true" />
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#1260ed] to-[#37bda8] text-xs font-extrabold text-white shadow-[0_3px_10px_rgba(18,96,237,0.2)]">
