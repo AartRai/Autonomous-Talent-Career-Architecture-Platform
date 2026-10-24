@@ -8,7 +8,26 @@ import RecruiterLayout from './components/recruiter/RecruiterLayout.jsx'
 import RecruiterDashboardPage from './pages/recruiter/RecruiterDashboardPage.jsx'
 import PostJobPage from './pages/recruiter/PostJobPage.jsx'
 import TalentSearchPage from './pages/recruiter/TalentSearchPage.jsx'
-import PlaceholderSection from './pages/recruiter/PlaceholderSection.jsx'
+import CandidateProfilesPage from './pages/recruiter/CandidateProfilesPage.jsx'
+import ApplicationsPage from './pages/recruiter/ApplicationsPage.jsx'
+import AnalyticsPage from './pages/recruiter/AnalyticsPage.jsx'
+import RecruiterProfilePage from './pages/recruiter/RecruiterProfilePage.jsx'
+import FacultyLayout from './components/faculty/FacultyLayout.jsx'
+import FacultyDashboardPage from './pages/faculty/FacultyDashboardPage.jsx'
+import ResearchOpportunitiesPage from './pages/faculty/ResearchOpportunitiesPage.jsx'
+import IndustrialTrainingFDPPage from './pages/faculty/IndustrialTrainingFDPPage.jsx'
+import CollaborationRequestsPage from './pages/faculty/CollaborationRequestsPage.jsx'
+import FacultyProfilePage from './pages/faculty/FacultyProfilePage.jsx'
+import FacultyNotificationsPage from './pages/faculty/FacultyNotificationsPage.jsx'
+import StudentLayout from './components/student/StudentLayout.jsx'
+import StudentDashboardPage from './pages/student/StudentDashboardPage.jsx'
+import StudentProfilePage from './pages/student/StudentProfilePage.jsx'
+import StudentSkillAnalysisPage from './pages/student/StudentSkillAnalysisPage.jsx'
+import StudentRecommendedJobsPage from './pages/student/StudentRecommendedJobsPage.jsx'
+import StudentRecommendedCoursesPage from './pages/student/StudentRecommendedCoursesPage.jsx'
+import StudentApplicationsPage from './pages/student/StudentApplicationsPage.jsx'
+import StudentNotificationsPage from './pages/student/StudentNotificationsPage.jsx'
+
 
 function App() {
   return (
@@ -19,15 +38,35 @@ function App() {
       <Route path="/about" element={<AboutPage />} />
       <Route path="/features" element={<FeaturesPage />} />
 
+      <Route path="/student" element={<StudentLayout />}>
+        <Route index element={<StudentDashboardPage />} />
+        <Route path="profile" element={<StudentProfilePage />} />
+        <Route path="skill-analysis" element={<StudentSkillAnalysisPage />} />
+        <Route path="recommended-jobs" element={<StudentRecommendedJobsPage />} />
+        <Route path="recommended-courses" element={<StudentRecommendedCoursesPage />} />
+        <Route path="applications" element={<StudentApplicationsPage />} />
+        <Route path="notifications" element={<StudentNotificationsPage />} />
+      </Route>
+
       {/* Recruiter Workspace Routes */}
       <Route path="/recruiter" element={<RecruiterLayout />}>
         <Route index element={<RecruiterDashboardPage />} />
         <Route path="post-job" element={<PostJobPage />} />
         <Route path="talent-search" element={<TalentSearchPage />} />
-        <Route path="candidates" element={<PlaceholderSection title="Candidate Profiles" />} />
-        <Route path="applications" element={<PlaceholderSection title="Applications Management" />} />
-        <Route path="analytics" element={<PlaceholderSection title="Analytics & Reports" />} />
-        <Route path="company" element={<PlaceholderSection title="Profile / Company Details" />} />
+        <Route path="candidates" element={<CandidateProfilesPage />} />
+        <Route path="applications" element={<ApplicationsPage />} />
+        <Route path="analytics" element={<AnalyticsPage />} />
+        <Route path="company" element={<RecruiterProfilePage />} />
+      </Route>
+
+      {/* Faculty Workspace Routes */}
+      <Route path="/faculty" element={<FacultyLayout />}>
+        <Route index element={<FacultyDashboardPage />} />
+        <Route path="opportunities" element={<ResearchOpportunitiesPage />} />
+        <Route path="training" element={<IndustrialTrainingFDPPage />} />
+        <Route path="collaborations" element={<CollaborationRequestsPage />} />
+        <Route path="profile" element={<FacultyProfilePage />} />
+        <Route path="notifications" element={<FacultyNotificationsPage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
