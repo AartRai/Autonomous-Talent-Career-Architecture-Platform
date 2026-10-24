@@ -45,12 +45,16 @@ async def get_matches(
 ) -> MatchesResponse:
     profile = await profile_service.get_or_create_profile(db, user)
     student_skills = _student_skill_names(profile)
+    embedding_text = profile_text(profile)
 
-    try:
-        profile_embedding = await embed_text(profile_text(profile))
-        ranked = await _rank_by_embedding(db, profile_embedding, limit)
-    except EmbedderUnavailable:
+    if not embedding_text.strip():
         ranked = await _rank_by_overlap(db, student_skills, limit)
+    else:
+        try:
+            profile_embedding = await embed_text(embedding_text)
+            ranked = await _rank_by_embedding(db, profile_embedding, limit)
+        except EmbedderUnavailable:
+            ranked = await _rank_by_overlap(db, student_skills, limit)
 
     matches: list[JobMatch] = []
     for job, score, method in ranked:

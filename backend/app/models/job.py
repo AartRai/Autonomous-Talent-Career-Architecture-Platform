@@ -40,12 +40,19 @@ class ExperienceLevel(StrEnum):
     junior = "1–3 years"
     mid = "3–5 years"
     senior = "5+ years"
+    not_specified = "Not specified"
 
 
 class JobStatus(StrEnum):
     draft = "draft"
     active = "active"
     closed = "closed"
+
+
+class JobSource(StrEnum):
+    seeded = "seeded"
+    user = "user"
+    scraped = "scraped"
 
 
 def _enum_values(enum_cls: type[StrEnum]) -> list[str]:
@@ -74,8 +81,8 @@ class Job(Base):
     id: Mapped[uuid.UUID] = mapped_column(
         Uuid(as_uuid=True), primary_key=True, server_default=func.gen_random_uuid()
     )
-    recruiter_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    recruiter_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=True
     )
 
     title: Mapped[str] = mapped_column(String(200), nullable=False)
@@ -104,6 +111,13 @@ class Job(Base):
         server_default=JobStatus.active.value,
         default=JobStatus.active,
     )
+    source: Mapped[JobSource] = mapped_column(
+        SaEnum(JobSource, native_enum=False, length=8, values_callable=_enum_values),
+        nullable=False,
+        server_default=JobSource.user.value,
+        default=JobSource.user,
+    )
+    source_url: Mapped[str | None] = mapped_column(String(500), unique=True)
     embedding: Mapped[list[float] | None] = mapped_column(Vector(384), nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(

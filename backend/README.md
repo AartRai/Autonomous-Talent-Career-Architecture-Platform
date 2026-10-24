@@ -17,6 +17,23 @@ alembic upgrade head
 .venv/Scripts/uvicorn app.main:app --reload --port 8000
 ```
 
+### Market-intelligence ETL (optional)
+
+```sh
+# Windows: use --pool=solo (the default prefork pool is unreliable on Windows)
+.venv/Scripts/celery -A app.worker worker --loglevel=info --pool=solo
+# scheduler (separate process; -B/--beat is not supported on Windows):
+.venv/Scripts/celery -A app.worker beat --loglevel=info
+```
+
+Nightly schedule (beat): jobs at 02:00, courses at 02:30 UTC.
+
+Collectors: Remotive + Arbeitnow (jobs), FreeCodeCamp curriculum + Udemy
+Affiliate API (courses, Udemy needs `UDEMY_CLIENT_ID`/`UDEMY_CLIENT_SECRET`).
+Collected jobs are upserted by `source_url` (idempotent), tagged
+`source=scraped` with no recruiter, and get embeddings + skills from the seed
+vocabulary, so they appear in students' `GET /matches`.
+
 - `GET http://localhost:8000/health` → `{"status": "ok"}`
 - Swagger UI: `http://localhost:8000/docs`
 - CORS allows the Vite dev origin `http://localhost:5173`

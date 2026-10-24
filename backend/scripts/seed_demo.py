@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core import security
 from app.db.session import async_session_factory
-from app.models.job import ExperienceLevel, Job, JobStatus, JobType, WorkMode
+from app.models.job import ExperienceLevel, Job, JobSource, JobStatus, JobType, WorkMode
 from app.models.profile import Profile
 from app.models.skill import SkillSource
 from app.models.user import RoleEnum, User
@@ -108,6 +108,7 @@ async def seed(session: AsyncSession) -> tuple[bool, int]:
                 responsibilities=data["responsibilities"],
                 qualifications=data["qualifications"],
                 status=JobStatus.active,
+                source=JobSource.seeded,
             )
             job.required_skills = required_skills
             job.preferred_skills = preferred_skills

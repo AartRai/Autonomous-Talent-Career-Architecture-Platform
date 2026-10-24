@@ -1,7 +1,5 @@
 import uuid
-import zlib
 
-import pytest
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -34,34 +32,6 @@ JOB_REACT = {
 
 def _auth(body: dict) -> dict[str, str]:
     return {"Authorization": f"Bearer {body['access_token']}"}
-
-
-def _text_vector(text: str) -> list[float]:
-    """Deterministic fake embedding: same normalized text -> same vector.
-
-    Distinct words hash to different buckets, so unrelated texts are
-    (near-)orthogonal and shared words produce positive cosine similarity.
-    """
-    vector = [0.0] * 384
-    for word in sorted(set(text.split())):
-        bucket = zlib.crc32(word.encode("utf-8")) % 384
-        vector[bucket] += 1.0
-    norm = sum(value * value for value in vector) ** 0.5 or 1.0
-    return [value / norm for value in vector]
-
-
-@pytest.fixture
-def fake_embeddings(monkeypatch):
-    async def fake_embed_text(text: str) -> list[float]:
-        return _text_vector(text)
-
-    async def fake_embed_texts(texts: list[str]) -> list[list[float]]:
-        return [_text_vector(text) for text in texts]
-
-    monkeypatch.setattr("app.services.matches.embed_text", fake_embed_text)
-    monkeypatch.setattr("app.ml.skill_match.embed_texts", fake_embed_texts)
-    monkeypatch.setattr("app.services.jobs.embed_text", fake_embed_text)
-    return _text_vector
 
 
 async def _make_student(client: AsyncClient, make_user, email: str = "m-stu@example.com") -> dict:

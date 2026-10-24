@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.ml.embedder import EmbedderUnavailable, embed_text
-from app.models.job import Job, JobStatus
+from app.models.job import Job, JobSource, JobStatus
 from app.models.skill import SkillSource
 from app.models.user import User
 from app.schemas.jobs import JobCreate
@@ -47,6 +47,7 @@ async def create_job(db: AsyncSession, recruiter: User, data: JobCreate) -> Job:
         responsibilities=data.responsibilities,
         qualifications=data.qualifications,
         status=JobStatus.active,
+        source=JobSource.user,
     )
     job.required_skills = required_skills
     job.preferred_skills = preferred_skills

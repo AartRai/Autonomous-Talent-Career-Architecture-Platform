@@ -19,6 +19,8 @@ class Settings(BaseSettings):
     resume_storage_dir: str = "storage/resumes"
     max_resume_upload_mb: int = 5
     skill_match_threshold: float = 0.55
+    udemy_client_id: SecretStr | None = None
+    udemy_client_secret: SecretStr | None = None
 
 
 @lru_cache
