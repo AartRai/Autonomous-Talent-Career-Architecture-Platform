@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.models.user import RoleEnum
-from app.schemas.skills import SkillOut
+from app.schemas.skills import SkillOut, clean_skill_names
 
 
 class _StrictModel(BaseModel):
@@ -54,12 +54,4 @@ class ProfileSkillsIn(BaseModel):
     @field_validator("skills")
     @classmethod
     def clean_skills(cls, values: list[str]) -> list[str]:
-        cleaned: list[str] = []
-        for value in values:
-            stripped = value.strip()
-            if not stripped:
-                raise ValueError("Skill names cannot be empty")
-            if len(stripped) > 100:
-                raise ValueError("Skill name must be at most 100 characters")
-            cleaned.append(stripped)
-        return cleaned
+        return clean_skill_names(values)

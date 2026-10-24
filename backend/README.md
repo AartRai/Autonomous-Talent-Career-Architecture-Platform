@@ -13,6 +13,7 @@ python -m venv .venv
 copy .env.example .env               # optional; defaults match compose
 alembic upgrade head
 .venv/Scripts/python -m scripts.seed_skills   # seed the ~200-term skill vocabulary
+.venv/Scripts/python -m scripts.seed_demo     # optional: demo recruiter + sample jobs
 .venv/Scripts/uvicorn app.main:app --reload --port 8000
 ```
 
