@@ -115,17 +115,108 @@ async def test_jobs_recent_limits_to_5(client: AsyncClient, make_user) -> None:
     assert response.json()[0]["title"] == "Job 5"
 
 
-async def test_candidates_and_analytics_empty(client: AsyncClient, make_user) -> None:
-    recruiter = await _recruiter(client, make_user)
+async def _make_student(client: AsyncClient, make_user, email: str, **profile) -> dict:
+    student = await make_user(email)
+    headers = _auth(student)
+    if profile:
+        response = await client.put("/api/v1/profiles/me", headers=headers, json=profile)
+        assert response.status_code == 200
+    return student
+
+
+async def test_candidates_and_analytics_with_students(
+    client: AsyncClient, make_user, fake_embeddings
+) -> None:
+    student_a = await _make_student(
+        client, make_user, "rec-cand-a@example.com", headline="Python dev"
+    )
+    await client.put(
+        "/api/v1/profiles/me/skills", headers=_auth(student_a), json={"skills": ["Python"]}
+    )
+    await _make_student(client, make_user, "rec-cand-b@example.com", headline="React dev")
+    recruiter = await make_user("rec-dash2@example.com", role="recruiter")
+
+    candidates = await client.get(
+        "/api/v1/recruiter/candidates/recent", headers=_auth(recruiter)
+    )
+    assert candidates.status_code == 200
+    items = candidates.json()
+    assert len(items) == 2
+    assert items[0]["initials"]  # initials computed
+    assert "Python" in items[0]["skills"] or "Python" in items[1]["skills"]
+
+    analytics = await client.get("/api/v1/recruiter/analytics/skills", headers=_auth(recruiter))
+    assert analytics.status_code == 200
+    skills = analytics.json()
+    assert len(skills) == 1
+    assert skills[0]["skill"] == "Python"
+    assert skills[0]["candidateCount"] == 1
+    assert skills[0]["percentage"] == 50
+
+
+async def test_talent_search_filters_by_skills_and_query(
+    client: AsyncClient, make_user, fake_embeddings
+) -> None:
+    python_student = await _make_student(
+        client, make_user, "ts-python@example.com", headline="Python backend engineer"
+    )
+    await client.put(
+        "/api/v1/profiles/me/skills", headers=_auth(python_student), json={"skills": ["Python"]}
+    )
+    react_student = await _make_student(
+        client, make_user, "ts-react@example.com", headline="React frontend engineer"
+    )
+    await client.put(
+        "/api/v1/profiles/me/skills", headers=_auth(react_student), json={"skills": ["React"]}
+    )
+    recruiter = await make_user("ts-rec@example.com", role="recruiter")
     headers = _auth(recruiter)
 
-    candidates = await client.get("/api/v1/recruiter/candidates/recent", headers=headers)
-    assert candidates.status_code == 200
-    assert candidates.json() == []
+    by_skill = await client.get(
+        "/api/v1/recruiter/talent-search", headers=headers, params={"skills": "python"}
+    )
+    assert by_skill.status_code == 200
+    assert len(by_skill.json()) == 1
+    assert by_skill.json()[0]["skills"] == ["Python"]
 
-    analytics = await client.get("/api/v1/recruiter/analytics/skills", headers=headers)
-    assert analytics.status_code == 200
-    assert analytics.json() == []
+    by_query = await client.get(
+        "/api/v1/recruiter/talent-search", headers=headers, params={"q": "react"}
+    )
+    assert len(by_query.json()) == 1
+    assert by_query.json()[0]["skills"] == ["React"]
+
+
+async def test_talent_search_scores_and_shape(
+    client: AsyncClient, make_user, fake_embeddings
+) -> None:
+    python_student = await _make_student(
+        client, make_user, "ts-score@example.com",
+        headline="Python developer",
+        bio="Loves building APIs with Python.",
+    )
+    await client.put(
+        "/api/v1/profiles/me/skills", headers=_auth(python_student), json={"skills": ["Python"]}
+    )
+    recruiter = await make_user("ts-rec2@example.com", role="recruiter")
+
+    response = await client.get(
+        "/api/v1/recruiter/talent-search", headers=_auth(recruiter), params={"q": "python"}
+    )
+
+    assert response.status_code == 200
+    item = response.json()[0]
+    assert item["demoMatchScore"] > 0
+    assert item["role"] == "Python developer"
+    assert item["summary"] == "Loves building APIs with Python."
+    assert item["tone"] == "blue"
+
+
+async def test_talent_search_requires_recruiter_role(client: AsyncClient, make_user) -> None:
+    student = await make_user("ts-guard@example.com")
+    assert (
+        await client.get("/api/v1/recruiter/talent-search", headers=_auth(student))
+    ).status_code == 403
+    assert (await client.get("/api/v1/recruiter/talent-search")).status_code == 401
 
 
 async def test_dashboard_requires_recruiter_role(client: AsyncClient, make_user) -> None:

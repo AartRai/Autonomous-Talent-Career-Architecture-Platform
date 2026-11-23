@@ -28,6 +28,23 @@ class RecentCandidateItem(BaseModel):
     tone: str
 
 
+class TalentSearchCandidate(BaseModel):
+    id: str
+    name: str
+    initials: str
+    role: str
+    education: str
+    educationDegree: str
+    experienceLevel: str
+    experienceYears: str
+    location: str
+    workMode: str
+    skills: list[str]
+    demoMatchScore: int
+    summary: str
+    tone: str
+
+
 class RecentJobItem(BaseModel):
     id: str
     title: str

@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.deps import require_roles
@@ -11,8 +11,10 @@ from app.schemas.recruiter import (
     RecentJobItem,
     RecruiterStat,
     SkillDistributionItem,
+    TalentSearchCandidate,
 )
 from app.services import recruiter as recruiter_service
+from app.services.recruiter import TALENT_SEARCH_LIMIT
 
 router = APIRouter(prefix="/recruiter", tags=["recruiter"])
 
@@ -42,3 +44,14 @@ async def analytics_skills(
     db: DbSession, current_user: RecruiterUser
 ) -> list[SkillDistributionItem]:
     return await recruiter_service.skill_distribution(db, current_user)
+
+
+@router.get("/talent-search", response_model=list[TalentSearchCandidate])
+async def talent_search(
+    db: DbSession,
+    current_user: RecruiterUser,
+    q: Annotated[str, Query(max_length=200)] = "",
+    skills: Annotated[str, Query(max_length=500)] = "",
+    limit: Annotated[int, Query(ge=1, le=50)] = TALENT_SEARCH_LIMIT,
+) -> list[TalentSearchCandidate]:
+    return await recruiter_service.talent_search(db, current_user, q, skills, limit)

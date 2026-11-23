@@ -137,7 +137,7 @@ def _text_vector(text: str) -> list[float]:
     (near-)orthogonal and shared words produce positive cosine similarity.
     """
     vector = [0.0] * 384
-    for word in sorted(set(text.split())):
+    for word in sorted(set(text.lower().split())):
         bucket = zlib.crc32(word.encode("utf-8")) % 384
         vector[bucket] += 1.0
     norm = sum(value * value for value in vector) ** 0.5 or 1.0
@@ -155,4 +155,5 @@ def fake_embeddings(monkeypatch):
     monkeypatch.setattr("app.services.matches.embed_text", fake_embed_text)
     monkeypatch.setattr("app.ml.skill_match.embed_texts", fake_embed_texts)
     monkeypatch.setattr("app.services.jobs.embed_text", fake_embed_text)
+    monkeypatch.setattr("app.services.recruiter.embed_text", fake_embed_text)
     return _text_vector
