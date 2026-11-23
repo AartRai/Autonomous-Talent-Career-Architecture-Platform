@@ -6,6 +6,7 @@ from app.routers.jobs import router as jobs_router
 from app.routers.matches import router as matches_router
 from app.routers.opportunities import router as opportunities_router
 from app.routers.profiles import router as profiles_router
+from app.routers.recommendations import router as recommendations_router
 from app.routers.recruiter import router as recruiter_router
 from app.routers.resumes import router as resumes_router
 from app.routers.skills import router as skills_router
@@ -20,3 +21,4 @@ api_v1.include_router(recruiter_router)
 api_v1.include_router(matches_router)
 api_v1.include_router(applications_router)
 api_v1.include_router(opportunities_router)
+api_v1.include_router(recommendations_router)

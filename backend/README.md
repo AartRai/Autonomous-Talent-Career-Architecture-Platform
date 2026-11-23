@@ -41,6 +41,40 @@ vocabulary, so they appear in students' `GET /matches`.
 - Resume uploads are stored under `storage/resumes` (gitignored, configurable via `RESUME_STORAGE_DIR`); extracted text lives in the DB. Uploads are capped at `MAX_RESUME_UPLOAD_MB` (default 5 MB) and validated by file signature.
 - If the spaCy model is missing, resume parsing returns 503 with the install command in the error detail.
 
+## API contract summary (for the frontend team)
+
+All endpoints live under `/api/v1`. Errors use FastAPI's `{"detail": ...}` shape.
+
+| Method | Path | Roles | Purpose |
+|---|---|---|---|
+| POST | /auth/signup | public | create account (student/faculty/recruiter) → `{user, access_token, refresh_token}` |
+| POST | /auth/login | public | `{email, password, remember_me?}` → same shape as signup |
+| POST | /auth/refresh | public | `{refresh_token}` → `{access_token}` |
+| GET | /auth/me | any | current user |
+| GET | /skills?q= | any | autocomplete, limit 20 |
+| GET | /profiles/me | student/faculty/recruiter | role-shaped profile + skills (lazy-created) |
+| PUT | /profiles/me | student/faculty/recruiter | update own profile (role-specific fields) |
+| PUT | /profiles/me/skills | student/faculty | replace skill set, max 50 |
+| POST | /resumes | student | multipart upload (PDF/DOCX/TXT, 5 MB) |
+| GET | /resumes/me | student | own resumes, metadata only |
+| POST | /resumes/{id}/parse | student | skill suggestions (nothing saved) |
+| POST | /recruiter/jobs | recruiter | create a job |
+| GET | /recruiter/dashboard/stats | recruiter | 4 stat cards |
+| GET | /recruiter/jobs/recent | recruiter | own jobs, newest first, limit 5 |
+| GET | /recruiter/candidates/recent | recruiter | latest 5 students |
+| GET | /recruiter/analytics/skills | recruiter | skill distribution across students |
+| GET | /recruiter/talent-search?q=&skills= | recruiter | student search, semantic matchScore |
+| GET | /matches | student | jobs ranked by match score + gap analysis |
+| POST | /jobs/{id}/apply | student | apply (409 if already applied) |
+| GET | /applications | student | own applications |
+| GET | /recruiter/applications | recruiter | applications on own jobs |
+| PATCH | /recruiter/applications/{id}/status | recruiter | set status |
+| GET | /opportunities?type=&q= | any | faculty opportunities list |
+| POST | /opportunities | faculty/recruiter | create an opportunity |
+| POST | /opportunities/{id}/apply | faculty | apply (409 if already applied) |
+| GET | /opportunities/applications | faculty | own applications |
+| GET | /recommendations/courses | student | course suggestions for skill gaps |
+
 ## Checks
 
 ```sh
