@@ -7,7 +7,7 @@ import {
   BookmarkIcon,
 } from '../../components/recruiter/RecruiterIcons.jsx'
 import TalentSearchCandidateCard from '../../components/recruiter/TalentSearchCandidateCard.jsx'
-import { demoTalentSearchCandidates } from '../../data/recruiterMockData.js'
+import { talentSearch } from '../../services/recruiterService.js'
 
 function TalentSearchPage() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -16,7 +16,8 @@ function TalentSearchPage() {
   const [selectedEducation, setSelectedEducation] = useState('')
   const [selectedLocation, setSelectedLocation] = useState('')
   const [submittedSearch, setSubmittedSearch] = useState(null)
-  const [shortlistedIds, setShortlistedIds] = useState(['talent-3'])
+  const [candidates, setCandidates] = useState([])
+  const [shortlistedIds, setShortlistedIds] = useState([])
   const [previewCandidate, setPreviewCandidate] = useState(null)
 
   // Close candidate preview modal on Escape key press
@@ -34,7 +35,23 @@ function TalentSearchPage() {
     }
   }, [previewCandidate])
 
-  const handleExecuteSearch = (
+  // Initial load: show the latest candidates before any search is run
+  useEffect(() => {
+    let isMounted = true
+    talentSearch({ limit: 20 })
+      .then((data) => {
+        if (isMounted) {
+          setCandidates(data)
+          setSubmittedSearch({ query: '', skill: '', experience: '', education: '', location: '' })
+        }
+      })
+      .catch(() => {})
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const handleExecuteSearch = async (
     query = searchQuery,
     skill = selectedSkill,
     experience = selectedExperience,
@@ -49,6 +66,16 @@ function TalentSearchPage() {
       location,
       searchedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     })
+    try {
+      const data = await talentSearch({
+        q: query.trim(),
+        skills: skill && skill !== 'All skills' ? skill : '',
+        limit: 20,
+      })
+      setCandidates(data)
+    } catch {
+      setCandidates([])
+    }
   }
 
   const handleSearchSubmit = (e) => {
@@ -92,9 +119,9 @@ function TalentSearchPage() {
     'Cloud / DevOps Specialist',
   ]
 
-  // Frontend demo filtering applied when search is submitted
+  // Client-side refinement of the server-provided candidate list
   const filteredCandidates = submittedSearch
-    ? demoTalentSearchCandidates.filter((candidate) => {
+    ? candidates.filter((candidate) => {
         // 1. Keyword / query match
         if (submittedSearch.query) {
           const rawQuery = submittedSearch.query.toLowerCase()

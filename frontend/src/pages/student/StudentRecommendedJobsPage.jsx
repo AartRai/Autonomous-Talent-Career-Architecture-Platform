@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getStudentJobRecommendations } from '../../services/studentService.js'
+import { applyToJob as applyToJobApi, getStudentJobRecommendations } from '../../services/studentService.js'
 
 const matchedSkills = [
   { name: 'Python', level: 'Advanced' },
@@ -116,11 +116,16 @@ function StudentRecommendedJobsPage() {
     setAnnouncement(isSaved ? `${job.title} removed from saved jobs.` : `${job.title} saved.`)
   }
 
-  const applyToJob = (job) => {
+  const applyToJob = async (job) => {
     const isApplied = appliedJobs.includes(job.id)
     if (isApplied) return
-    setAppliedJobs((current) => [...current, job.id])
-    setAnnouncement(`Demo application recorded for ${job.title} at ${job.company}.`)
+    try {
+      await applyToJobApi(job.id, null)
+      setAppliedJobs((current) => [...current, job.id])
+      setAnnouncement(`Application submitted for ${job.title} at ${job.company}.`)
+    } catch (error) {
+      setAnnouncement(`Could not apply: ${error.message}`)
+    }
   }
 
   const resetFilters = () => {

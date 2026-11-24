@@ -8,7 +8,7 @@ import {
 } from '../../components/recruiter/RecruiterIcons.jsx'
 import CandidateProfileCard from '../../components/recruiter/CandidateProfileCard.jsx'
 import CandidateProfileModal from '../../components/recruiter/CandidateProfileModal.jsx'
-import { demoCandidateProfiles } from '../../data/recruiterMockData.js'
+import { talentSearch } from '../../services/recruiterService.js'
 
 function CandidateProfilesPage() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -18,8 +18,21 @@ function CandidateProfilesPage() {
   const [selectedLocation, setSelectedLocation] = useState('')
   const [activeCategory, setActiveCategory] = useState('all')
   const [selectedCandidate, setSelectedCandidate] = useState(null)
-  const [shortlistedIds, setShortlistedIds] = useState(['talent-3'])
+  const [shortlistedIds, setShortlistedIds] = useState([])
   const [feedbackToast, setFeedbackToast] = useState(null)
+  const [candidates, setCandidates] = useState([])
+
+  useEffect(() => {
+    let isMounted = true
+    talentSearch({ limit: 50 })
+      .then((data) => {
+        if (isMounted) setCandidates(data)
+      })
+      .catch(() => {})
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   // Auto-dismiss feedback toast message
   useEffect(() => {
@@ -83,7 +96,7 @@ function CandidateProfilesPage() {
 
   // Filter candidates based on search query, dropdown filters, and category chips
   const filteredCandidates = useMemo(() => {
-    return demoCandidateProfiles.filter((candidate) => {
+    return candidates.filter((candidate) => {
       // 1. Text search across candidate name, role/career focus, education, location, and skills
       if (searchQuery.trim()) {
         const query = searchQuery.trim().toLowerCase()
@@ -495,9 +508,9 @@ function CandidateProfilesPage() {
           </div>
 
           <div className="text-xs font-medium text-[#71829e]">
-            {filteredCandidates.length === demoCandidateProfiles.length
-              ? `Showing all ${filteredCandidates.length} demonstration candidate profiles`
-              : `Showing ${filteredCandidates.length} of ${demoCandidateProfiles.length} candidate profiles`}
+            {filteredCandidates.length === candidates.length
+              ? `Showing all ${candidates.length} candidate profiles`
+              : `Showing ${filteredCandidates.length} of ${candidates.length} candidate profiles`}
           </div>
         </div>
 

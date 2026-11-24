@@ -226,7 +226,7 @@ function PostJobPage() {
   }
 
   // Publish Job handler
-  const handlePublish = (e) => {
+  const handlePublish = async (e) => {
     e.preventDefault()
     const validationErrors = validateForm()
 

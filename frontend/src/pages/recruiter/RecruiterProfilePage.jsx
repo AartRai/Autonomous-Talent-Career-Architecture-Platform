@@ -5,6 +5,7 @@ import {
   CandidateProfilesIcon,
   CloseIcon,
 } from '../../components/recruiter/RecruiterIcons.jsx'
+import { updateRecruiterProfile } from '../../services/recruiterService.js'
 
 // Supplementary SVG icons for Profile & Company UI
 function UserIcon({ className = 'h-4 w-4' }) {
@@ -274,7 +275,7 @@ function RecruiterProfilePage() {
   }
 
   // Save changes handler
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     if (e) e.preventDefault()
     setHasSubmitted(true)
 
@@ -307,16 +308,29 @@ function RecruiterProfilePage() {
       return
     }
 
-    // If valid, update session state and establish current inputs as new reset baseline
+    // If valid, persist through the API and update session state
+    try {
+      await updateRecruiterProfile({
+        company_name: formData.company || null,
+        job_title: formData.jobTitle || null,
+      })
+    } catch (error) {
+      setFeedback({
+        type: 'error',
+        title: 'Could Not Save',
+        message: error.message,
+      })
+      return
+    }
+
     setSavedData({ ...formData })
     setHasSubmitted(false)
     setTouched({})
     setErrors({})
     setFeedback({
       type: 'success',
-      title: 'Profile Updated (Demo Mode)',
-      message:
-        'Changes have been saved to your current frontend demo session. These updates are stored locally in component memory and are not persisted to a backend or remote database.',
+      title: 'Profile Updated',
+      message: 'Your profile changes have been saved to your account.',
     })
   }
 

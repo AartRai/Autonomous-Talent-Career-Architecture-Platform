@@ -1,8 +1,40 @@
 import { apiRequest } from './api'
 
-// Profile
-export function getStudentProfileData() {
-  return apiRequest('/profiles/me')
+// Profile — mapped into the page's expected display shape
+export async function getStudentProfileData() {
+  const data = await apiRequest('/profiles/me')
+  const degree = data.education_degree || 'Student'
+  const institution = data.education_institution || 'Your Institution'
+  const year = data.graduation_year || new Date().getFullYear()
+  return {
+    details: {
+      name: data.headline || 'Student',
+      education: degree,
+      email: '',
+      phone: '',
+      location: 'Not specified',
+      about: data.bio || 'Add a bio to tell recruiters about yourself.',
+      target_role: data.target_role || '',
+    },
+    completion: data.headline && data.bio ? 85 : 40,
+    dateOfBirth: '',
+    gender: '',
+    languages: [],
+    resume: { name: '', uploadedAt: '' },
+    tabs: {
+      Education: [
+        {
+          id: 'education-1',
+          title: institution ? `${degree}, ${institution}` : degree,
+          subtitle: `Graduation ${year}`,
+          detail: data.bio || '',
+        },
+      ],
+      Skills: data.skills.map((skill) => skill.display_name),
+      Projects: [],
+      Certifications: [],
+    },
+  }
 }
 
 export function updateStudentProfile(payload) {

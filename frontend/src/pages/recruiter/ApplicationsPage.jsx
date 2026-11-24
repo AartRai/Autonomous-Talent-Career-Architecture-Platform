@@ -9,7 +9,7 @@ import {
   EyeIcon,
 } from '../../components/recruiter/RecruiterIcons.jsx'
 import ApplicationDetailsModal from '../../components/recruiter/ApplicationDetailsModal.jsx'
-import { demoApplications } from '../../data/recruiterMockData.js'
+import { getRecruiterApplications, updateApplicationStatus } from '../../services/recruiterService.js'
 
 const allStatuses = [
   'Applied',
@@ -100,13 +100,24 @@ function CheckIcon({ className = 'h-4 w-4' }) {
 }
 
 function ApplicationsPage() {
-  // Store applications in frontend React state for interactive pipeline demo
-  const [applications, setApplications] = useState(() => demoApplications)
+  const [applications, setApplications] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedJob, setSelectedJob] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('')
   const [selectedApplication, setSelectedApplication] = useState(null)
   const [feedbackToast, setFeedbackToast] = useState(null)
+
+  useEffect(() => {
+    let isMounted = true
+    getRecruiterApplications()
+      .then((data) => {
+        if (isMounted) setApplications(data)
+      })
+      .catch(() => {})
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   // Auto-dismiss feedback toast message
   useEffect(() => {
@@ -134,13 +145,26 @@ function ApplicationsPage() {
   }, [applications])
 
   // Handler for changing an application's status
-  const handleStatusChange = (applicationId, newStatus) => {
+  const handleStatusChange = async (applicationId, newStatus) => {
     if (!allStatuses.includes(newStatus)) return
 
     const target = applications.find((a) => a.id === applicationId)
     if (!target || target.status === newStatus) return
 
     const oldStatus = target.status
+
+    try {
+      await updateApplicationStatus(applicationId, newStatus)
+    } catch (error) {
+      setFeedbackToast({
+        id: `${applicationId}-error`,
+        candidateName: target.candidateName,
+        oldStatus,
+        newStatus,
+        message: `Could not update status: ${error.message}`,
+      })
+      return
+    }
 
     // Update application state by stable ID
     setApplications((prev) =>
@@ -154,7 +178,6 @@ function ApplicationsPage() {
       prev && prev.id === applicationId ? { ...prev, status: newStatus } : prev
     )
 
-    // Trigger clear demo feedback message
     setFeedbackToast({
       id: `${applicationId}-${newStatus}`,
       candidateName: target.candidateName,

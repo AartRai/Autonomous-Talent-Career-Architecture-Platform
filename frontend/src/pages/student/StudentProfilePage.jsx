@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { StudentProfileIcon } from '../../components/student/StudentIcons.jsx'
-import { getStudentProfileData } from '../../services/studentService.js'
+import { getStudentProfileData, parseResume, replaceStudentSkills, updateStudentProfile, uploadResume } from '../../services/studentService.js'
 
 const profileTabs = ['About', 'Education', 'Skills', 'Projects', 'Certifications', 'Resume']
 
@@ -113,25 +113,54 @@ function StudentProfilePage() {
     setNotice('')
   }
 
-  const handleSave = (event) => {
+  const handleSave = async (event) => {
     event.preventDefault()
-    setProfile(draftProfile)
-    setIsEditing(false)
-    setNotice('Profile changes saved for this session.')
+    try {
+      await updateStudentProfile({
+        headline: draftProfile.name || draftProfile.headline,
+        bio: draftProfile.about,
+        education_degree: draftProfile.education,
+        target_role: draftProfile.target_role || null,
+      })
+      const skills = draftProfile.tabs?.Skills ?? profile?.tabs?.Skills ?? []
+      if (skills.length > 0) await replaceStudentSkills(skills)
+      setProfile(draftProfile)
+      setIsEditing(false)
+      setNotice('Profile saved.')
+    } catch (error) {
+      setNotice(error.message)
+    }
   }
 
-  const handleResumeChange = (event) => {
+  const handleResumeChange = async (event) => {
     const [file] = event.target.files ?? []
     if (!file) return
-    if (file.type !== 'application/pdf') {
-      setNotice('Please select a PDF file for your resume.')
+    const allowedTypes = [
+      'application/pdf',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'text/plain',
+    ]
+    if (!allowedTypes.includes(file.type)) {
+      setNotice('Please select a PDF, DOCX, or TXT file for your resume.')
       event.target.value = ''
       return
     }
 
     setResumePreviewUrl(URL.createObjectURL(file))
     setResumeFile(file)
-    setNotice('Resume selected for this session. It has not been uploaded to a server.')
+    setNotice('Uploading resume...')
+    try {
+      const resume = await uploadResume(file)
+      const parsed = await parseResume(resume.id)
+      const suggestions = (parsed.skills ?? []).map((skill) => skill.display_name)
+      setNotice(
+        suggestions.length
+          ? `Resume uploaded. Suggested skills: ${suggestions.join(', ')}`
+          : 'Resume uploaded.'
+      )
+    } catch (error) {
+      setNotice(`Resume upload failed: ${error.message}`)
+    }
   }
 
   const renderTabContent = () => {

@@ -21,6 +21,10 @@ export function getRecruiterApplications() {
   return apiRequest('/recruiter/applications')
 }
 
+export function updateRecruiterProfile(payload) {
+  return apiRequest('/profiles/me', { method: 'PUT', body: payload })
+}
+
 export function updateApplicationStatus(applicationId, status) {
   return apiRequest(`/recruiter/applications/${applicationId}/status`, {
     method: 'PATCH',
