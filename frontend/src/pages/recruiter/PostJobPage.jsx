@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { postJob } from '../../services/recruiterService.js'
 
 const errorFieldIdMap = {
   jobTitle: 'jobTitle',
@@ -249,17 +250,31 @@ function PostJobPage() {
       return
     }
 
-    // Valid: simulate publication workflow
+    // Valid: publish through the API
     setErrors({})
     setIsSubmitting(true)
-    setTimeout(() => {
+    try {
+      await postJob({
+        ...formData,
+        jobDescription,
+        requiredSkills,
+        preferredSkills,
+        responsibilities,
+        qualifications,
+      })
       setIsSubmitting(false)
       setShowPublishedModal(true)
       setSubmitStatus({
         type: 'success',
-        message: 'Job posting validated and compiled in local demo session.',
+        message: 'Job published successfully.',
       })
-    }, 350)
+    } catch (error) {
+      setIsSubmitting(false)
+      setSubmitStatus({
+        type: 'error',
+        message: error.message ?? 'Could not publish the job. Please try again.',
+      })
+    }
   }
 
   const handleResetForm = () => {
@@ -1037,7 +1052,7 @@ function PostJobPage() {
                 </div>
                 <div>
                   <h3 id="published-dialog-title" className="text-xl font-bold text-[#101c3d]">
-                    Job Published (Local Demo Simulation)
+                    Job Published
                   </h3>
                   <p className="text-xs text-[#66738d]">
                     All required fields validated successfully.
@@ -1055,10 +1070,10 @@ function PostJobPage() {
             </div>
 
             {/* Scope & Architecture Notice */}
-            <div className="mt-4 rounded-xl border border-amber-200/80 bg-amber-50 p-3.5 text-xs text-amber-900">
-              <p className="font-semibold">Local Demo Notice:</p>
-              <p className="mt-0.5 text-amber-800">
-                This job posting has passed all client-side validations and is previewed in your active browser session. It has not been published to a real database or made publicly accessible pending FastAPI backend integration.
+            <div className="mt-4 rounded-xl border border-emerald-200/80 bg-emerald-50 p-3.5 text-xs text-emerald-900">
+              <p className="font-semibold">Published:</p>
+              <p className="mt-0.5 text-emerald-800">
+                Your job is now live and will appear in students' recommendations and your recruiter dashboard.
               </p>
             </div>
 

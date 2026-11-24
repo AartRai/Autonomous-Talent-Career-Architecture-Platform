@@ -1,50 +1,57 @@
-import {
-  recruiterStatsData,
-  recentCandidatesData,
-  recentJobsData,
-  skillDistributionData,
-} from '../data/recruiterMockData.js'
+import { apiRequest } from './api'
 
-/**
- * Recruiter Service
- *
- * Separates data retrieval from presentation components.
- * Currently serves structured mock demonstration data for local development.
- * Designed to be swapped with HTTP fetch calls to the FastAPI backend
- * once endpoints are available.
- */
-
-export async function getRecruiterDashboardStats() {
-  // Demonstration mock retrieval.
-  // In the future, this will call the FastAPI endpoint:
-  // e.g.: const response = await fetch('/api/v1/recruiter/dashboard/stats');
-  //       return await response.json();
-  return Promise.resolve(recruiterStatsData)
+// Recruiter dashboard — response shapes mirror the API contracts.
+export function getRecruiterDashboardStats() {
+  return apiRequest('/recruiter/dashboard/stats')
 }
 
-export async function getRecentCandidates() {
-  // Demonstration mock retrieval.
-  // In the future, this will call the FastAPI endpoint:
-  // e.g.: const response = await fetch('/api/v1/recruiter/candidates/recent');
-  //       return await response.json();
-  return Promise.resolve(recentCandidatesData)
+export function getRecentCandidates() {
+  return apiRequest('/recruiter/candidates/recent')
 }
 
-export async function getRecentJobs() {
-  // Demonstration mock retrieval.
-  // In the future, this will call the FastAPI endpoint:
-  // e.g.: const response = await fetch('/api/v1/recruiter/jobs/recent');
-  //       return await response.json();
-  return Promise.resolve(recentJobsData)
+export function getRecentJobs() {
+  return apiRequest('/recruiter/jobs/recent')
 }
 
-export async function getSkillDistribution() {
-  // Demonstration mock retrieval.
-  // In the future, this will call the FastAPI endpoint:
-  // e.g.: const response = await fetch('/api/v1/recruiter/analytics/skills');
-  //       return await response.json();
-  return Promise.resolve(skillDistributionData)
+export function getSkillDistribution() {
+  return apiRequest('/recruiter/analytics/skills')
 }
 
+export function getRecruiterApplications() {
+  return apiRequest('/recruiter/applications')
+}
 
+export function updateApplicationStatus(applicationId, status) {
+  return apiRequest(`/recruiter/applications/${applicationId}/status`, {
+    method: 'PATCH',
+    body: { status },
+  })
+}
 
+export function talentSearch({ q = '', skills = '', limit = 20 } = {}) {
+  const params = new URLSearchParams()
+  if (q) params.set('q', q)
+  if (skills) params.set('skills', skills)
+  if (limit !== 20) params.set('limit', String(limit))
+  const suffix = params.toString() ? `?${params}` : ''
+  return apiRequest(`/recruiter/talent-search${suffix}`)
+}
+
+export async function postJob(formData) {
+  const body = {
+    title: formData.jobTitle,
+    company_name: formData.companyName,
+    location: formData.location,
+    work_mode: formData.workMode,
+    job_type: formData.jobType,
+    experience_level: formData.experienceLevel,
+    salary_range: formData.salaryRange || null,
+    openings_count: Number(formData.openingsCount),
+    description: formData.jobDescription,
+    responsibilities: formData.responsibilities,
+    qualifications: formData.qualifications,
+    required_skills: formData.requiredSkills,
+    preferred_skills: formData.preferredSkills,
+  }
+  return apiRequest('/recruiter/jobs', { method: 'POST', body })
+}

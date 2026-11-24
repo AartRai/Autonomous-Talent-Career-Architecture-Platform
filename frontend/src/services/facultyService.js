@@ -1,76 +1,115 @@
-import {
-  facultyOverviewStats,
-  recentFacultyOpportunities,
-  recentCollaborationRequests,
-  facultyOpportunitiesData,
-  facultyOpportunitiesSummary,
-  facultyTrainingProgramsData,
-  facultyTrainingProgramsSummary,
-  facultyCollaborationRequestsData,
-  facultyCollaborationRequestsSummary,
-  facultyProfileInitialData,
-  facultyNotificationsData,
-  facultyNotificationsSummary,
-} from '../data/facultyMockData.js'
+import { apiRequest } from './api'
 
-/**
- * Faculty Service
- *
- * Separates data retrieval from presentation components.
- * Currently serves structured mock demonstration data for local development.
- * Designed to be swapped with HTTP fetch calls to the FastAPI backend
- * once endpoints are available.
- */
-
-export async function getFacultyDashboardStats() {
-  return Promise.resolve(facultyOverviewStats)
+function mapOpportunity(opportunity) {
+  return {
+    id: opportunity.id,
+    title: opportunity.title,
+    type: opportunity.type,
+    organization: opportunity.organization,
+    location: opportunity.location ?? 'Remote',
+    description: opportunity.description,
+    status: opportunity.status === 'open' ? 'Open' : 'Closed',
+    tags: [opportunity.type],
+  }
 }
 
-export async function getRecentFacultyOpportunities() {
-  return Promise.resolve(recentFacultyOpportunities)
+async function fetchOpportunities() {
+  const data = await apiRequest('/opportunities')
+  return data.map(mapOpportunity)
 }
 
-export async function getRecentCollaborationRequests() {
-  return Promise.resolve(recentCollaborationRequests)
-}
-
-export async function getFacultyOpportunities() {
-  return Promise.resolve(facultyOpportunitiesData)
-}
-
-export async function getFacultyOpportunitiesSummary() {
-  return Promise.resolve(facultyOpportunitiesSummary)
+export function getFacultyOpportunities() {
+  return fetchOpportunities()
 }
 
 export async function getFacultyTrainingPrograms() {
-  return Promise.resolve(facultyTrainingProgramsData)
-}
-
-export async function getFacultyTrainingProgramsSummary() {
-  return Promise.resolve(facultyTrainingProgramsSummary)
+  const data = await apiRequest('/opportunities?type=FDP')
+  return data.map(mapOpportunity)
 }
 
 export async function getFacultyCollaborationRequests() {
-  return Promise.resolve(facultyCollaborationRequestsData)
+  const data = await apiRequest('/opportunities?type=Consultancy%20RFP')
+  return data.map(mapOpportunity)
+}
+
+export async function getRecentFacultyOpportunities() {
+  const data = await apiRequest('/opportunities')
+  return data.slice(0, 4).map(mapOpportunity)
+}
+
+export async function getRecentCollaborationRequests() {
+  const data = await apiRequest('/opportunities?type=Consultancy%20RFP')
+  return data.slice(0, 4).map(mapOpportunity)
+}
+
+export async function getFacultyOpportunitiesSummary() {
+  const opportunities = await fetchOpportunities()
+  return {
+    total: opportunities.length,
+    open: opportunities.filter((item) => item.status === 'Open').length,
+    types: [...new Set(opportunities.map((item) => item.type))].length,
+  }
+}
+
+export async function getFacultyTrainingProgramsSummary() {
+  const programs = await getFacultyTrainingPrograms()
+  return { total: programs.length, open: programs.filter((item) => item.status === 'Open').length }
 }
 
 export async function getFacultyCollaborationRequestsSummary() {
-  return Promise.resolve(facultyCollaborationRequestsSummary)
+  const requests = await getFacultyCollaborationRequests()
+  return { total: requests.length, open: requests.filter((item) => item.status === 'Open').length }
 }
 
-export async function getFacultyProfileData() {
-  return Promise.resolve(facultyProfileInitialData)
+export async function getFacultyDashboardStats() {
+  const [opportunities, applications] = await Promise.all([
+    fetchOpportunities(),
+    getFacultyOpportunityApplications(),
+  ])
+  return [
+    { id: 'opportunities', label: 'Opportunities', value: String(opportunities.length), detail: 'Open for applications', icon: 'opportunities', tone: 'blue' },
+    { id: 'applications', label: 'My Applications', value: String(applications.length), detail: 'Submitted by you', icon: 'applications', tone: 'emerald' },
+    { id: 'training', label: 'Training Programs', value: String(opportunities.filter((item) => item.type === 'FDP').length), detail: 'FDP programs', icon: 'training', tone: 'purple' },
+    { id: 'collaborations', label: 'Collaborations', value: String(opportunities.filter((item) => item.type === 'Consultancy RFP').length), detail: 'Consultancy RFPs', icon: 'collaboration', tone: 'rose' },
+  ]
 }
 
-export async function getFacultyNotifications() {
-  return Promise.resolve(facultyNotificationsData)
+export function createOpportunity(payload) {
+  return apiRequest('/opportunities', { method: 'POST', body: payload })
 }
 
-export async function getFacultyNotificationsSummary() {
-  return Promise.resolve(facultyNotificationsSummary)
+export function applyToOpportunity(opportunityId, note) {
+  return apiRequest(`/opportunities/${opportunityId}/apply`, {
+    method: 'POST',
+    body: { note: note ?? null },
+  })
 }
 
+export async function getFacultyOpportunityApplications() {
+  const data = await apiRequest('/opportunities/applications')
+  return data.map((application) => ({
+    id: application.id,
+    opportunity: application.opportunity.title,
+    organization: application.opportunity.organization,
+    type: application.opportunity.type,
+    status: application.status,
+    appliedOn: application.applied_date,
+  }))
+}
 
+export function getFacultyProfileData() {
+  return apiRequest('/profiles/me')
+}
 
+export function updateFacultyProfile(payload) {
+  return apiRequest('/profiles/me', { method: 'PUT', body: payload })
+}
 
+// Not implemented server-side yet — empty states keep the pages working.
+export function getFacultyNotifications() {
+  return Promise.resolve([])
+}
 
+export function getFacultyNotificationsSummary() {
+  return Promise.resolve({ unread: 0, total: 0 })
+}

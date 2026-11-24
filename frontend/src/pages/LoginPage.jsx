@@ -1,17 +1,36 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
 import { BenefitIcon, FieldIcon, GoogleMark, LearningIllustration } from '../components.jsx'
 import { benefits } from '../benefits.js'
+import { login } from '../services/authService.js'
+
+const HOME_BY_ROLE = {
+  student: '/student',
+  faculty: '/faculty',
+  recruiter: '/recruiter',
+}
 
 function LoginPage() {
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
   const [notice, setNotice] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
-    setNotice('Your details are ready. Connect an authentication service to finish signing in.')
+    setNotice('')
+    setSubmitting(true)
+    const email = document.getElementById('email').value.trim()
+    const password = document.getElementById('password').value
+    try {
+      const user = await login({ email, password, rememberMe })
+      navigate(HOME_BY_ROLE[user.role] ?? '/')
+    } catch (error) {
+      setNotice(error.message)
+      setSubmitting(false)
+    }
   }
 
   function handleForgotPassword() {
@@ -79,8 +98,8 @@ function LoginPage() {
 
                 {notice && <p role="status" className="rounded-lg bg-blue-50 px-3 py-2.5 text-xs leading-5 text-blue-800">{notice}</p>}
 
-                <button type="submit" className="flex h-[48px] w-full items-center justify-center rounded-lg bg-gradient-to-r from-[#1260ed] to-[#1264f5] text-[15px] font-semibold text-white shadow-[0_4px_10px_rgba(20,94,235,0.18)] transition hover:from-blue-700 hover:to-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                  Log In
+                <button type="submit" disabled={submitting} className="flex h-[48px] w-full items-center justify-center rounded-lg bg-gradient-to-r from-[#1260ed] to-[#1264f5] text-[15px] font-semibold text-white shadow-[0_4px_10px_rgba(20,94,235,0.18)] transition hover:from-blue-700 hover:to-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-60">
+                  {submitting ? 'Signing in...' : 'Log In'}
                 </button>
               </form>
 
